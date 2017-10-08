@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>public</access>
+        <active>true</active>
+        <api_name>x_snc_rcr_hub.RcRHubUtils</api_name>
+        <client_callable>true</client_callable>
+        <description/>
+        <name>RcRHubUtils</name>
+        <script><![CDATA[var RcRHubUtils = Class.create();
+RcRHubUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
+	SPACE_DELIMITER: "###",
+	STATUS_CODE_NOVALID_INSTANCE: -1000,
+	STATUS_CODE_INSTANCE_INACTIVE: -1,
+	STATUS_CODE_AUTH_FAILED: -2,
+	STATUS_CODE_PERMISSION_FAILED: -3,
+	STATUS_CODE_SUCCESS: 1,
+	MIN_DURATION: 2,
+	MAX_DURATION: 5,
+	
+	setup: function() {
+		var result = {};
+		var recordId = this.getParameter('sysparm_recordId');
+		var gr = new GlideRecord('x_snc_rcr_hub_instance_watch');
+		gr.get(recordId);
+		if(gr.isValidRecord()) {
+			result = this.validateInstance(gr);
+		}else {
+			result["code"] = this.STATUS_CODE_NOVALID_INSTANCE;
+		}		
+	},
+	
+	validateInstances: function() {
+		var gr = new GlideRecord('x_snc_rcr_hub_instance_watch');
+		gr.addActiveQuery();
+		gr.query();
+		while(gr.next()) {
+			this.validateInstance(gr);
+		}
+	},
+	
+	validateInstance: function(instanceRecord) {
+		var output = {};
+		var instance, username, password, isActive;
+
+		isActive = instanceRecord.getValue('active');
+		instance = instanceRecord.getValue('instance_name');
+		username = instanceRecord.getValue('user_name');
+		password = instanceRecord.password.getDecryptedValue();
+
+		if(!isActive){
+			output["code"] = this.STATUS_CODE_INSTANCE_INACTIVE;
+			gr.status = "failed";
+		}else{
+			var restMessage = new sn_ws.RESTMessageV2();
+			var endpoint = "http://" + instance + ".service-now.com/api/sn_devstudio/v1/vcs/apps";
+			gs.info("Endpoint: " + endpoint);
+			restMessage.setBasicAuth(username,password);
+			restMessage.setHttpMethod("post");
+			var repoUrl = gs.getProperty('x_snc_rcr_hub.rcr_remote_app_repo');
+			var bodyContent = JSON.stringify({
+				url: repoUrl,
+				setTestConnection: false
+			});
+			restMessage.setRequestBody(bodyContent);
+			restMessage.setEndpoint(endpoint);
+			var response = restMessage.execute();
+			var statusCode = response.getStatusCode(); //401 = Auth failed
+			//403 = Authorization failed
+			switch(statusCode){
+				case 401: output["code"] = this.STATUS_CODE_AUTH_FAILED;
+					gr.status = "failed";
+					break;
+				case 403: output["code"] = this.STATUS_CODE_PERMISSION_FAILED;
+					gr.status = "failed";
+					break;
+				case 200:
+				case 202:
+					output["code"] = this.STATUS_CODE_SUCCESS;
+					instanceRecord.status = "inprogress";
+					instanceRecord.percentage_complete = 0;
+					var progressId = JSON.parse(response.getBody()).result.progressId;
+					output["progressId"] = progressId;
+					instanceRecord.tracking_id = progressId;
+					this.allowReadAccessOnVersionsTable(instance, username, password);
+					gs.eventQueue('x_snc_rcr_hub.verifyAppStatus', instanceRecord, instanceRecord.sys_id, progressId);
+					break;
+			}
+		}
+		
+		instanceRecord.setWorkflow(false);
+		instanceRecord.update();
+		return JSON.stringify(output);
+	},
+	
+	allowReadAccessOnVersionsTable: function(instance, username, password) {
+		var restMessage = new sn_ws.RESTMessageV2();
+		var gr = new GlideRecord('sys_db_object');
+		gr.addQuery('name', 'sys_update_version');
+		gr.query();
+		if(gr.next()){
+			var endpoint = "http://" + instance + ".service-now.com/api/now/v1/table/sys_db_object/" + gr.sys_id;
+			restMessage.setBasicAuth(username,password);
+			restMessage.setHttpMethod("post");
+			var bodyContent = JSON.stringify({"read_access": "true"});
+			restMessage.setRequestBody(bodyContent);
+			restMessage.setEndpoint(endpoint);
+			var response = restMessage.execute();						
+		}
+	},
+
+	isRcROutput: function(record) {
+		var result = false;
+		var midServerName = gs.getProperty('x_snc_rcr_hub.rcrhub.midserver.name');
+		if(record.getValue('agent') == 'mid.server.' + midServerName && record.getValue('topic') == 'Command' && record.getValue('queue') == 'input') {
+			result = true;
+		}
+		return result;
+	},
+
+	runCodeReview: function(onDuration) {
+		var instancesGr = new GlideRecord('x_snc_rcr_hub_instance_watch');
+		instancesGr.addActiveQuery();
+		instancesGr.addQuery('status', 'success');
+		instancesGr.query();
+		while(instancesGr.next()) {
+			this.runCodeReviewOnInstance(instancesGr, onDuration);
+		}
+	},
+	
+	runCodeReviewOnInstance: function(instanceRecord, onDuration) {
+		var cmd, duration, files;
+		if(onDuration) {
+			cmd = gs.getProperty('x_snc_rcr_hub.RCR_COMMAND_ON_DURATION');
+			duration = gs.getProperty('x_snc_rcr_hub.RCR_SLIDING_WINDOW');
+			cmd = cmd.replace('$1', instanceRecord.getValue('instance_name'));
+			cmd = cmd.replace('$2', duration);			
+		}else {
+			cmd = gs.getProperty('x_snc_rcr_hub.RCR_COMMAND_ON_FILES');
+			files = this.getListOfFilesToReview();
+			cmd = cmd.replace('$1', instanceRecord.getValue('instance_name'));
+			cmd = cmd.replace('$2', files);				
+		}
+		this.sendCommand(cmd);
+	},
+	
+	getListOfFilesToReview: function() {
+		var gr = new GlideRecord('x_snc_rcr_hub_review_results');
+		var result = [];
+		var resultObj = {};
+		var encodedQuery = "review_last_seen<=javascript:gs.hoursAgo(" + this.MIN_DURATION + ")^review_last_seen>=javascript:gs.hoursAgo(" + this.MAX_DURATION + ")";
+		gr.addEncodedQuery(encodedQuery);
+		gr.query();
+		while(gr.next()) {
+			resultObj = {};
+			resultObj["id"] = gr.file_id;
+			resultObj["type"] = gr.file_type;
+			result.push(resultObj);
+		}
+		return JSON.stringify(result);
+	},
+	
+	sendCommand: function(command) {		
+		var ecc_queue = new GlideRecord("ecc_queue");
+		var server = gs.getProperty('x_snc_rcr_hub.rcrhub.midserver.name');
+		ecc_queue.initialize();
+		ecc_queue.agent = "mid.server." + server;
+		ecc_queue.queue = "output";
+		ecc_queue.topic = "Command";
+		ecc_queue.payload = '<?xml version="1.0" encoding="UTF-8"?><parameters><parameter name="name" value="' + command + '"/></parameters>';
+		//Get SysID of new ECC Queue record
+		var ecc_sysid = ecc_queue.insert();
+		return ecc_sysid;
+	},
+
+	processOutput: function(record) {
+		var obj,reviewObj;
+		var tempPayload = record.getValue('payload');
+		gs.info('In processOutput - ');
+		tempPayload = tempPayload.replaceAll('\n','').replaceAll('\r','');
+		var myRegexp = /.*<stdout>(.*)<\/stdout>/g;
+		var match = myRegexp.exec(tempPayload);
+		gs.info('In processOutput - match[1] = ' + match[1]);
+		if(match && match.length > 0) {
+			var outputPayload = this.convert2Json(match[1]);
+			gs.info('In processOutput - outputPayload = ' + outputPayload);
+			var jsonArry = global.JSON.parse(outputPayload);
+			gs.info('In processOutput - jsonArry = ' + jsonArry);
+			gs.info('Obj1 - ' + jsonArry[0]["file_sysid"]);
+
+			for(var objIndx in jsonArry) {
+				obj = jsonArry[objIndx];
+				gs.info(obj.file + "::" + obj.instance + "::" + obj.reviews);
+				if(obj.reviews && obj.reviews.length > 0) {
+					for(var reviewIndx in obj.reviews) {
+						reviewObj = obj.reviews[reviewIndx];
+						this.upsertReview(reviewObj, obj.file, obj.instance);
+						gs.info(reviewObj.line + "::" + reviewObj.ruleid + "::" + reviewObj.message + "::" + reviewObj.developer);
+					}
+				}
+			}
+		}
+
+	},
+
+	upsertReview: function(reviewInfo, fileInfo, instance) {
+		if(!fileInfo || !fileInfo.sysid || !reviewInfo || !reviewInfo.ruleid || !instance) {
+			return;
+		}
+		
+		var gr = new GlideRecord('x_snc_rcr_hub_review_results');
+		gr.addQuery('instance_name', instance);
+		gr.addQuery('file_id', fileInfo.sysid);
+		gr.addQuery('line_number', reviewInfo.line);
+		gr.addQuery('rule_number', reviewInfo.ruleid);
+		gr.query();
+		if(gr.getRowCount() > 0) {
+			gr.next();
+			gr.setValue('review_last_seen', new GlideDateTime());
+			gr.setValue('occurrence', parseInt(gr.getValue('occurrence')) + 1);
+		}else {
+			gr.initialize();
+			gr.setValue('developer', reviewInfo.developer);
+			gr.setValue('error_level', reviewInfo.error_level);
+			gr.setValue('file_id', fileInfo.sysid);
+			gr.setValue('file_name', fileInfo.name);
+			gr.setValue('file_type', fileInfo.type);
+			gr.setValue('instance_name', instance);
+			gr.setValue('line_number', reviewInfo.line);
+			gr.setValue('occurrence', 1);
+			gr.setValue('review_comments', reviewInfo.message);
+			gr.setValue('review_last_seen', new GlideDateTime());
+			gr.setValue('rule_description', reviewInfo.description);
+			gr.setValue('rule_name', reviewInfo.rulename);
+			gr.setValue('rule_number', reviewInfo.ruleid);
+		}
+		gr.update();
+	},
+
+	convert2Json: function(inputStr) {
+		var result = inputStr.replace(/(["][a-zA-Z0-9_ ]+["])/g, function(a, b){
+			return b.replaceAll(" ", this.SPACE_DELIMITER);
+		});
+		result = result.replace(/([^a-zA-Z0-9_#"])([a-zA-Z0-9_#]+)([^a-zA-Z0-9_#"])/g, "$1\"$2\"$3");
+		result = result.replaceAll(this.SPACE_DELIMITER_INSTANCE, " ");
+		return result;
+	},
+
+	type: 'RcRHubUtils'
+});]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>chaitanya</sys_created_by>
+        <sys_created_on>2017-09-24 05:03:38</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>4239974fdb9dc3007236d9f0ce9619cc</sys_id>
+        <sys_mod_count>58</sys_mod_count>
+        <sys_name>RcRHubUtils</sys_name>
+        <sys_package display_value="RcR-Hub" source="x_snc_rcr_hub">fa919f87db9dc3007236d9f0ce961914</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="RcR-Hub">fa919f87db9dc3007236d9f0ce961914</sys_scope>
+        <sys_update_name>sys_script_include_4239974fdb9dc3007236d9f0ce9619cc</sys_update_name>
+        <sys_updated_by>chaitanya</sys_updated_by>
+        <sys_updated_on>2017-10-08 20:25:10</sys_updated_on>
+    </sys_script_include>
+</record_update>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update sys_domain="global" table="sys_ui_action">
+    <sys_ui_action action="INSERT_OR_UPDATE">
+        <action_name>activate</action_name>
+        <active>true</active>
+        <client>true</client>
+        <comments/>
+        <condition/>
+        <form_action>true</form_action>
+        <form_button>true</form_button>
+        <form_context_menu>false</form_context_menu>
+        <form_link>false</form_link>
+        <hint/>
+        <list_action>true</list_action>
+        <list_banner_button>false</list_banner_button>
+        <list_button>false</list_button>
+        <list_choice>false</list_choice>
+        <list_context_menu>true</list_context_menu>
+        <list_link>false</list_link>
+        <list_save_with_form_button>false</list_save_with_form_button>
+        <name>Setup</name>
+        <onclick>setup()</onclick>
+        <order>100</order>
+        <script><![CDATA[function setup(){
+	var recordId = "";
+	try{
+		if(g_sysId) {
+			recordId = g_sysId;
+		}else {
+			recordId = g_form.getUniqueValue();
+		}
+	}catch(ex){
+		recordId = g_form.getUniqueValue();
+	}
+	
+	var ga = new GlideAjax('x_snc_rcr_hub.RcRHubUtils');
+	ga.addParam('sysparm_name','setup');
+	ga.addParam('sysparm_recordId', recordId);
+	
+	ga.getXML(processResponse);
+	
+	function processResponse(response){
+		
+		var answer = response.responseXML.documentElement.getAttribute("answer");
+		answer = JSON.parse(answer);
+		if(answer && answer["code"]){
+			switch(answer["code"]){
+				case -1:  
+					alert('Cannot setup the instance as the configuration is inactive. Please make it active and try again.');
+					break;
+				case -2:
+					alert('Authentication failed. Please update the credentials and try again.');
+					break;
+				case -3:
+					alert('Authorization failed. User should have appropriate access to continue setup.');
+					break;				
+				case 1:
+					alert('Setup process started....' + answer["progressId"]);				
+					break;
+				default:
+					alert('Unable to setup the instance. Please contact administrator.');
+					break;
+
+			}			
+		}
+	}
+}
+]]></script>
+        <show_insert>false</show_insert>
+        <show_multiple_update>false</show_multiple_update>
+        <show_query>false</show_query>
+        <show_update>true</show_update>
+        <sys_class_name>sys_ui_action</sys_class_name>
+        <sys_created_by>chaitanya</sys_created_by>
+        <sys_created_on>2017-09-24 05:08:25</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>07d7db8bdb9dc3007236d9f0ce96199a</sys_id>
+        <sys_mod_count>9</sys_mod_count>
+        <sys_name>Setup</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="RcR-Hub" source="x_snc_rcr_hub">fa919f87db9dc3007236d9f0ce961914</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="RcR-Hub">fa919f87db9dc3007236d9f0ce961914</sys_scope>
+        <sys_update_name>sys_ui_action_07d7db8bdb9dc3007236d9f0ce96199a</sys_update_name>
+        <sys_updated_by>chaitanya</sys_updated_by>
+        <sys_updated_on>2017-09-25 03:48:54</sys_updated_on>
+        <table>x_snc_rcr_hub_instance_watch</table>
+        <ui11_compatible>true</ui11_compatible>
+        <ui16_compatible>false</ui16_compatible>
+    </sys_ui_action>
+</record_update>

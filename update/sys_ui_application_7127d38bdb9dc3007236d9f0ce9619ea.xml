@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update sys_domain="global" table="sys_ui_application">
+    <sys_ui_application action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <hint/>
+        <name>Instance Watch</name>
+        <order/>
+        <roles>x_snc_rcr_hub.instance_watch_user</roles>
+        <sys_class_name>sys_ui_application</sys_class_name>
+        <sys_created_by>chaitanya</sys_created_by>
+        <sys_created_on>2017-09-24 04:54:08</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>7127d38bdb9dc3007236d9f0ce9619ea</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Instance Watch</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="RcR-Hub" source="x_snc_rcr_hub">fa919f87db9dc3007236d9f0ce961914</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="RcR-Hub">fa919f87db9dc3007236d9f0ce961914</sys_scope>
+        <sys_update_name>sys_ui_application_7127d38bdb9dc3007236d9f0ce9619ea</sys_update_name>
+        <sys_updated_by>chaitanya</sys_updated_by>
+        <sys_updated_on>2017-09-24 04:54:08</sys_updated_on>
+    </sys_ui_application>
+</record_update>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update sys_domain="global" table="sysevent_script_action">
+    <sysevent_script_action action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <condition_script/>
+        <description/>
+        <event_name>x_snc_rcr_hub.verifyAppStatus</event_name>
+        <name>VerifyAppStatus</name>
+        <order>100</order>
+        <script><![CDATA[var recordId = event.parm1;
+var instance, username, password, isActive;
+
+var gr = new GlideRecord('x_snc_rcr_hub_instance_watch');
+gr.get(recordId);
+
+if(gr.isValidRecord()){
+	instance = gr.getValue('instance_name');
+	username = gr.getValue('user_name');
+	password = gr.password.getDecryptedValue();
+}
+
+var restMessage = new sn_ws.RESTMessageV2();
+var endpoint = "http://" + instance + ".service-now.com/api/sn_devstudio/v1/vcs/transactions/" + event.parm2;
+gs.info("Endpoint: " + endpoint);
+restMessage.setBasicAuth(username,password);
+restMessage.setHttpMethod("get");
+restMessage.setEndpoint(endpoint);
+var response = restMessage.execute();
+var statusCode = response.getStatusCode();
+if(statusCode == 200){
+	var percentageComplete = JSON.parse(response.getBody()).result.percentComplete;
+	gr.percentage_complete = percentageComplete;
+	if(percentageComplete == 100){
+		gr.status = "success";
+	}else{
+		gs.eventQueue('x_snc_rcr_hub.verifyAppStatus', gr, event.parm1, event.parm2);
+	}
+	gr.update();
+}
+]]></script>
+        <synchronous>false</synchronous>
+        <sys_class_name>sysevent_script_action</sys_class_name>
+        <sys_created_by>chaitanya</sys_created_by>
+        <sys_created_on>2017-09-25 03:03:41</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>c075cce7db9907007236d9f0ce9619b5</sys_id>
+        <sys_mod_count>4</sys_mod_count>
+        <sys_name>VerifyAppStatus</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="RcR-Hub" source="x_snc_rcr_hub">fa919f87db9dc3007236d9f0ce961914</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="RcR-Hub">fa919f87db9dc3007236d9f0ce961914</sys_scope>
+        <sys_update_name>sysevent_script_action_c075cce7db9907007236d9f0ce9619b5</sys_update_name>
+        <sys_updated_by>chaitanya</sys_updated_by>
+        <sys_updated_on>2017-09-25 03:38:24</sys_updated_on>
+    </sysevent_script_action>
+</record_update>

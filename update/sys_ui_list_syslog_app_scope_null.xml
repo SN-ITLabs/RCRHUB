@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update>
+    <sys_ui_list parent="" relationship="" sys_domain="global" table="syslog_app_scope" version="2" view="">
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>level</element>
+            <list_id display_value="syslog_app_scope" element="NULL" name="syslog_app_scope" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">1e02cf8adbd447007236d9f0ce96196a</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>0</position>
+            <sum>false</sum>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2017-08-02 07:45:09</sys_created_on>
+            <sys_id>1202cf8adbd447007236d9f0ce96196c</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2017-08-02 07:45:09</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>message</element>
+            <list_id display_value="syslog_app_scope" element="NULL" name="syslog_app_scope" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">1e02cf8adbd447007236d9f0ce96196a</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>1</position>
+            <sum>false</sum>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2017-08-02 07:45:09</sys_created_on>
+            <sys_id>1a02cf8adbd447007236d9f0ce96196c</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2017-08-02 07:45:09</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>script_artifact</element>
+            <list_id display_value="syslog_app_scope" element="NULL" name="syslog_app_scope" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">1e02cf8adbd447007236d9f0ce96196a</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>2</position>
+            <sum>false</sum>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2017-08-02 07:45:09</sys_created_on>
+            <sys_id>9a02cf8adbd447007236d9f0ce96196c</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2017-08-02 07:45:09</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>script_artifact_table</element>
+            <list_id display_value="syslog_app_scope" element="NULL" name="syslog_app_scope" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">1e02cf8adbd447007236d9f0ce96196a</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>3</position>
+            <sum>false</sum>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2017-08-02 07:45:09</sys_created_on>
+            <sys_id>1e02cf8adbd447007236d9f0ce96196c</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2017-08-02 07:45:09</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>sequence</element>
+            <list_id display_value="syslog_app_scope" element="NULL" name="syslog_app_scope" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">1e02cf8adbd447007236d9f0ce96196a</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>4</position>
+            <sum>false</sum>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2017-08-02 07:45:09</sys_created_on>
+            <sys_id>9e02cf8adbd447007236d9f0ce96196c</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2017-08-02 07:45:09</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>source</element>
+            <list_id display_value="syslog_app_scope" element="NULL" name="syslog_app_scope" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">1e02cf8adbd447007236d9f0ce96196a</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>5</position>
+            <sum>false</sum>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2017-08-02 07:45:09</sys_created_on>
+            <sys_id>1202cf8adbd447007236d9f0ce96196d</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2017-08-02 07:45:09</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element/>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <name>syslog_app_scope</name>
+            <parent/>
+            <position/>
+            <relationship/>
+            <sum>false</sum>
+            <sys_class_name>sys_ui_list</sys_class_name>
+            <sys_created_by>chaitanya</sys_created_by>
+            <sys_created_on>2017-10-02 06:31:27</sys_created_on>
+            <sys_customer_update>true</sys_customer_update>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>a92ab4b1db618b007236d9f0ce96194e</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>syslog_app_scope</sys_name>
+            <sys_package display_value="RcR-Hub" source="x_snc_rcr_hub">fa919f87db9dc3007236d9f0ce961914</sys_package>
+            <sys_policy/>
+            <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+            <sys_scope display_value="RcR-Hub">fa919f87db9dc3007236d9f0ce961914</sys_scope>
+            <sys_update_name>sys_ui_list_syslog_app_scope_null</sys_update_name>
+            <sys_updated_by>chaitanya</sys_updated_by>
+            <sys_updated_on>2017-10-02 06:31:27</sys_updated_on>
+            <sys_user display_value="chaitanya chaitanya">c2d3fb45db3f7600a86a5404ce9619d5</sys_user>
+            <view display_value="Default view" name="NULL">Default view</view>
+            <view_name/>
+        </sys_ui_list>
+    </sys_ui_list>
+</record_update>

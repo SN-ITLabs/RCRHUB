@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sysauto_script">
+    <sysauto_script action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <condition/>
+        <conditional>false</conditional>
+        <name>Move Completed Reviews</name>
+        <run_as display_value="chaitanya chaitanya">c2d3fb45db3f7600a86a5404ce9619d5</run_as>
+        <run_as_tz/>
+        <run_dayofmonth>1</run_dayofmonth>
+        <run_dayofweek>1</run_dayofweek>
+        <run_period/>
+        <run_start>2017-10-04 17:53:54</run_start>
+        <run_time>1970-01-01 08:00:00</run_time>
+        <run_type>daily</run_type>
+        <script><![CDATA[var grUtil = new global.GlideRecordUtil();
+var closedReviewsGR;
+var grMap = {};
+var duration = gs.getProperty('x_snc_rcr_hub.RCR_SLIDING_WINDOW');
+var gr = new GlideRecord('x_snc_rcr_hub_review_results');
+var condition = "review_last_seen<=javascript:gs.daysAgoStart(2)^NQreview_status=ignored^sys_created_on<=javascript:gs.daysAgoStart(" + duration + ")";
+gr.addEncodedQuery(condition);
+gr.query();
+while(gr.next()) {
+	closedReviewsGR = new GlideRecord('x_snc_rcr_hub_closed_review_results');
+	closedReviewsGR.initialize();
+	grUtil.populateFromGR(grMap, gr);
+	grUtil.mergeToGR(grMap, closedReviewsGR);
+	closedReviewsGR.insert();	
+}
+gr.query();
+gr.deleteMultiple();
+]]></script>
+        <sys_class_name>sysauto_script</sys_class_name>
+        <sys_created_by>chaitanya</sys_created_by>
+        <sys_created_on>2017-10-04 18:06:00</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>b989a162dbe5cb007236d9f0ce96192f</sys_id>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_name>Move Completed Reviews</sys_name>
+        <sys_package display_value="RcR-Hub" source="x_snc_rcr_hub">fa919f87db9dc3007236d9f0ce961914</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="RcR-Hub">fa919f87db9dc3007236d9f0ce961914</sys_scope>
+        <sys_update_name>sysauto_script_b989a162dbe5cb007236d9f0ce96192f</sys_update_name>
+        <sys_updated_by>chaitanya</sys_updated_by>
+        <sys_updated_on>2017-10-04 19:13:42</sys_updated_on>
+        <upgrade_safe>false</upgrade_safe>
+    </sysauto_script>
+</record_update>
