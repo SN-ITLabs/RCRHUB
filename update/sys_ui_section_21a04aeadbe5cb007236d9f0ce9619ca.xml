@@ -281,6 +281,34 @@
             <sys_user/>
             <type/>
         </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>manager</element>
+            <position>20</position>
+            <sys_created_by>anil.akula</sys_created_by>
+            <sys_created_on>2017-10-29 07:24:08</sys_created_on>
+            <sys_id>a82944a6dbc24f407236d9f0ce961938</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_snc_rcr_hub_review_results" sys_domain="global" view="Default view">21a04aeadbe5cb007236d9f0ce9619ca</sys_ui_section>
+            <sys_updated_by>anil.akula</sys_updated_by>
+            <sys_updated_on>2017-10-29 07:24:08</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>version_id</element>
+            <position>21</position>
+            <sys_created_by>pradeep.g</sys_created_by>
+            <sys_created_on>2017-10-31 16:30:34</sys_created_on>
+            <sys_id>a0695893db0a8f407236d9f0ce96194f</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_snc_rcr_hub_review_results" sys_domain="global" view="Default view">21a04aeadbe5cb007236d9f0ce9619ca</sys_ui_section>
+            <sys_updated_by>pradeep.g</sys_updated_by>
+            <sys_updated_on>2017-10-31 16:30:34</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
         <sys_ui_section action="INSERT_OR_UPDATE">
             <caption/>
             <header>false</header>

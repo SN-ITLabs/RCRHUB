@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_snc_rcr_hub.RCRNotificationService</api_name>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>RCRNotificationService</name>
+        <script><![CDATA[var RCRNotificationService = Class.create();
+RCRNotificationService.prototype = {
+    initialize: function() {
+    },
+	fetchReviews : function(){
+		var hoursAgo = gs.getProperty('x_snc_rcr_hub.rcr.notification.interval');
+		var reviews = [];
+		var review = {};
+		var gr = new GlideRecord("x_snc_rcr_hub_review_results");
+			gr.addEncodedQuery('sys_created_on>=javascript:gs.hoursAgo('+hoursAgo+')');
+			gr.query();
+			gs.info('row count'+gr.getRowCount());
+			while (gr.next()) {
+				
+				review = {};
+				review['developer'] = gr.getValue('developer');
+				review['instance_name'] = gr.getValue('instance_name');
+				review['file_name'] = gr.getValue('file_name');
+				review['review_last_seen'] = gr.getValue('review_last_seen');
+				review['review_comments'] = gr.getValue('review_comments');
+				review['occurrence'] = gr.getValue('occurrence');
+				review['number'] = gr.getValue('number');
+				review['manager'] = gr.getValue('manager');
+				reviews.push(review);
+			}
+		return reviews;
+
+	},
+	groupReviewsByEmployeesAndManager : function(arrayOfReviews){
+		 var managersList = {};
+		 arrayOfReviews.forEach(function(review,index){
+			 if (!review['manager']) return;
+			 if(!managersList.hasOwnProperty(review['manager'])){
+				 managersList[review['manager']] = {};
+			 }
+			 if(!managersList[review['manager']].hasOwnProperty(review['developer'])){
+				 managersList[review['manager']][review['developer']] = [];
+			 }
+			 managersList[review['manager']][review['developer']].push(review);
+		 });
+		return managersList;
+	},
+	prepareTableTemplate :function(managerList){
+		var tableDefinition = ['<table style = "border-collapse:collapse;width:100%;font-family: sans-serif;font-size: 12px;"><tbody>',
+             '<tr>',
+ 					'<th align="center" valign="top" style="border: solid 1px #fab;">Developer</th>',
+					'<th align="center" valign="top" style="border: solid 1px #fab;">Instance</th>',
+					'<th align="center" valign="top" style="border: solid 1px #fab;">File</th>',
+ 				    '<th align="center" valign="top" style="border: solid 1px #fab;">Review No</th>',
+ 					'<th align="center" valign="top" style="border: solid 1px #fab;">Review Comments</th>',
+					'<th align="center" valign="top" style="border: solid 1px #fab;">Last Reported(days)</th>',
+            '</tr>'].join('');
+
+
+		var listOfReviewsByDeveloper = '', toList;
+		for(var manager in managerList){
+			listOfReviewsByDeveloper = '';
+			for(var developer in managerList[manager]){
+				toList += toList? ',' : '' + developer +'@servicenow.com';
+				managerList[manager][developer].forEach(function(review,index){
+				 listOfReviewsByDeveloper = listOfReviewsByDeveloper + '<tr>'+
+					'<td align="center" valign="top" style="border: solid 1px #fab;">'+review['developer']+'</td>'+
+					'<td align="center" valign="top" style="border: solid 1px #fab;">'+review['instance_name']+'</td>'+
+					'<td align="center" valign="top" style="border: solid 1px #fab;"><a href="#">'+review['file_name']+'</a></td>'+
+					'<td align="center" valign="top" style="border: solid 1px #fab;">'+review['number']+'</td>'+
+					'<td align="center" valign="top" style="border: solid 1px #fab;">'+review['review_comments']+'</td>'+
+					'<td align="center" valign="top" style="border: solid 1px #fab;">'+review['occurrence']+'</td>'+
+					'</tr>'	;			
+				});	
+			}
+			gs.info(tableDefinition+listOfReviewsByDeveloper+'</tbody></table>');
+			//HACK 
+			toList = 'pradeep.gouribhatla@servicenow.com';
+			gs.eventQueue('x_snc_rcr_hub.scheduled.notification', null, toList, tableDefinition+listOfReviewsByDeveloper+"</tbody></table>");
+			gs.info('event created');
+		}
+		
+		return '';
+		
+	},
+	
+	sendEmail : function(){
+		this.prepareTableTemplate(this.groupReviewsByEmployeesAndManager(this.fetchReviews()));
+	},
+	
+    type: 'RCRNotificationService'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>anil.akula</sys_created_by>
+        <sys_created_on>2017-10-28 19:27:05</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>fd04a952dbce0f407236d9f0ce9619f3</sys_id>
+        <sys_mod_count>21</sys_mod_count>
+        <sys_name>RCRNotificationService</sys_name>
+        <sys_package display_value="RcR-Hub" source="x_snc_rcr_hub">fa919f87db9dc3007236d9f0ce961914</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="RcR-Hub">fa919f87db9dc3007236d9f0ce961914</sys_scope>
+        <sys_update_name>sys_script_include_fd04a952dbce0f407236d9f0ce9619f3</sys_update_name>
+        <sys_updated_by>pradeep.g</sys_updated_by>
+        <sys_updated_on>2017-11-01 12:15:46</sys_updated_on>
+    </sys_script_include>
+</record_update>

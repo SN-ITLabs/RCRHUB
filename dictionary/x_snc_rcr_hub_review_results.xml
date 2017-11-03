@@ -16,6 +16,7 @@
         <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#9;var url = &quot;https://&quot; + current.instance_name + &quot;.service-now.com/sys_metadata.do?sys_id=&quot; + current.file_id;&#13;&#10;&#9;return url;  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="File URL" max_length="1024" name="file_url" read_only="true" type="url" virtual="true"/>
         <element label="Instance Name" max_length="40" name="instance_name" type="string"/>
         <element label="Line number" max_length="40" name="line_number" type="integer"/>
+        <element label="Manager" max_length="40" name="manager" type="string"/>
         <element default="javascript:getNextObjNumberPadded();" dynamic_default_value="fdcb83a85f220100a9ad2572f2b4773c" label="Number" max_length="40" name="number" type="string" use_dynamic_default="true"/>
         <element label="Occurrence" max_length="40" name="occurrence" type="integer"/>
         <element label="Review Comments" max_length="40" name="review_comments" type="string"/>
@@ -31,5 +32,6 @@
         <element label="Rule Name" max_length="40" name="rule_name" type="string"/>
         <element label="Rule Number" max_length="200" name="rule_number" type="string"/>
         <element default="javascript:current.getTableName();" label="Class" max_length="80" name="sys_class_name" type="sys_class_name"/>
+        <element label="Version Id" max_length="40" name="version_id" read_only="true" type="string"/>
     </element>
 </database>

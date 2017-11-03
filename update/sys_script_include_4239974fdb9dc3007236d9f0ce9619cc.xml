@@ -94,18 +94,23 @@ RcRHubUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 	},
 	
 	allowReadAccessOnVersionsTable: function(instance, username, password) {
+		
 		var restMessage = new sn_ws.RESTMessageV2();
-		var gr = new GlideRecord('sys_db_object');
-		gr.addQuery('name', 'sys_update_version');
-		gr.query();
-		if(gr.next()){
-			var endpoint = "http://" + instance + ".service-now.com/api/now/v1/table/sys_db_object/" + gr.sys_id;
-			restMessage.setBasicAuth(username,password);
-			restMessage.setHttpMethod("post");
+		restMessage.setBasicAuth(username,password);
+		var endpoint = "http://" + instance + ".service-now.com/api/now/v1/table/sys_db_object?sysparm_query=name=sys_update_version&sysparm_limit=1&sysparm_fields=sys_id";
+		restMessage.setHttpMethod("get");
+		restMessage.setEndpoint(endpoint);
+		var response = restMessage.execute();
+		var restMessages = JSON.parse(response.getBody());
+		if(restMessages && restMessages["result"] && restMessages["result"][0] && restMessages["result"][0]["sys_id"]) {
+			var recordId = restMessages["result"][0]["sys_id"];
+
+			endpoint = "http://" + instance + ".service-now.com/api/now/v1/table/sys_db_object/" + recordId;
+			restMessage.setHttpMethod("put");
 			var bodyContent = JSON.stringify({"read_access": "true"});
 			restMessage.setRequestBody(bodyContent);
 			restMessage.setEndpoint(endpoint);
-			var response = restMessage.execute();						
+			response = restMessage.execute();
 		}
 	},
 
@@ -177,29 +182,36 @@ RcRHubUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 		var obj,reviewObj;
 		var tempPayload = record.getValue('payload');
 		gs.info('In processOutput - ');
-		tempPayload = tempPayload.replaceAll('\n','').replaceAll('\r','');
-		var myRegexp = /.*<stdout>(.*)<\/stdout>/g;
-		var match = myRegexp.exec(tempPayload);
-		gs.info('In processOutput - match[1] = ' + match[1]);
-		if(match && match.length > 0) {
-			var outputPayload = this.convert2Json(match[1]);
-			gs.info('In processOutput - outputPayload = ' + outputPayload);
-			var jsonArry = global.JSON.parse(outputPayload);
-			gs.info('In processOutput - jsonArry = ' + jsonArry);
-			gs.info('Obj1 - ' + jsonArry[0]["file_sysid"]);
+		
+		if (!tempPayload) return;
+		
+		try {
+			var fullPayloadObj = gs.xmlToJSON(tempPayload);
+			if (!fullPayloadObj || !fullPayloadObj['results'] || !fullPayloadObj['results']['result']['stdout']) return;
+			
+			var rcr_results = JSON.parse(fullPayloadObj['results']['result']['stdout']);
+			if (Array.isArray(rcr_results) && rcr_results.length > 0){
+				//gs.info(JSON.stringify(rcr_results[0]['instance']));
+				gs.info('In processOutput - rcr_results = ' + rcr_results);
 
-			for(var objIndx in jsonArry) {
-				obj = jsonArry[objIndx];
-				gs.info(obj.file + "::" + obj.instance + "::" + obj.reviews);
-				if(obj.reviews && obj.reviews.length > 0) {
-					for(var reviewIndx in obj.reviews) {
-						reviewObj = obj.reviews[reviewIndx];
-						this.upsertReview(reviewObj, obj.file, obj.instance);
-						gs.info(reviewObj.line + "::" + reviewObj.ruleid + "::" + reviewObj.message + "::" + reviewObj.developer);
+				for(var objIndx in rcr_results) {
+					obj = rcr_results[objIndx];
+					gs.info(obj.file + "::" + obj.instance + "::" + obj.reviews);
+					
+					if(obj.reviews && obj.reviews.length > 0) {
+						for(var reviewIndx in obj.reviews) {
+							reviewObj = obj.reviews[reviewIndx];
+							this.upsertReview(reviewObj, obj.file, obj.instance);
+							gs.info(reviewObj.line + "::" + reviewObj.ruleid + "::" + reviewObj.message + "::" + reviewObj.developer);
+						}
 					}
 				}
 			}
+		} catch(e){
+			gs.error('Failed parsing the RCR tool output','SNRCR');
+			return;
 		}
+
 
 	},
 
@@ -211,6 +223,7 @@ RcRHubUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 		var gr = new GlideRecord('x_snc_rcr_hub_review_results');
 		gr.addQuery('instance_name', instance);
 		gr.addQuery('file_id', fileInfo.sysid);
+		if(fileInfo.versionId) gr.addQuery('version_id', fileInfo.versionId);
 		gr.addQuery('line_number', reviewInfo.line);
 		gr.addQuery('rule_number', reviewInfo.ruleid);
 		gr.query();
@@ -223,6 +236,7 @@ RcRHubUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 			gr.setValue('developer', reviewInfo.developer);
 			gr.setValue('error_level', reviewInfo.error_level);
 			gr.setValue('file_id', fileInfo.sysid);
+			gr.setValue('version_id', fileInfo.versionId);
 			gr.setValue('file_name', fileInfo.name);
 			gr.setValue('file_type', fileInfo.type);
 			gr.setValue('instance_name', instance);
@@ -253,14 +267,14 @@ RcRHubUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
         <sys_created_on>2017-09-24 05:03:38</sys_created_on>
         <sys_customer_update>true</sys_customer_update>
         <sys_id>4239974fdb9dc3007236d9f0ce9619cc</sys_id>
-        <sys_mod_count>58</sys_mod_count>
+        <sys_mod_count>61</sys_mod_count>
         <sys_name>RcRHubUtils</sys_name>
         <sys_package display_value="RcR-Hub" source="x_snc_rcr_hub">fa919f87db9dc3007236d9f0ce961914</sys_package>
         <sys_policy>read</sys_policy>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="RcR-Hub">fa919f87db9dc3007236d9f0ce961914</sys_scope>
         <sys_update_name>sys_script_include_4239974fdb9dc3007236d9f0ce9619cc</sys_update_name>
-        <sys_updated_by>chaitanya</sys_updated_by>
-        <sys_updated_on>2017-10-08 20:25:10</sys_updated_on>
+        <sys_updated_by>pradeep.g</sys_updated_by>
+        <sys_updated_on>2017-10-31 16:41:17</sys_updated_on>
     </sys_script_include>
 </record_update>

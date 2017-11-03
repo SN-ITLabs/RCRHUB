@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sysevent_register">
+    <sysevent_register action="INSERT_OR_UPDATE">
+        <description/>
+        <event_name>x_snc_rcr_hub.scheduled.notification</event_name>
+        <fired_by>Business rule</fired_by>
+        <queue/>
+        <suffix>scheduled.notification</suffix>
+        <sys_class_name>sysevent_register</sys_class_name>
+        <sys_created_by>anil.akula</sys_created_by>
+        <sys_created_on>2017-10-29 17:30:10</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>2fa356eedb864f407236d9f0ce961980</sys_id>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_name>x_snc_rcr_hub.scheduled.notification</sys_name>
+        <sys_package display_value="RcR-Hub" source="x_snc_rcr_hub">fa919f87db9dc3007236d9f0ce961914</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="RcR-Hub">fa919f87db9dc3007236d9f0ce961914</sys_scope>
+        <sys_update_name>sysevent_register_2fa356eedb864f407236d9f0ce961980</sys_update_name>
+        <sys_updated_by>anil.akula</sys_updated_by>
+        <sys_updated_on>2017-10-29 17:30:44</sys_updated_on>
+        <table/>
+    </sysevent_register>
+</record_update>
