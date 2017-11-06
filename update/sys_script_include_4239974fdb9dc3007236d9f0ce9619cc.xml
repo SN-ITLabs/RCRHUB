@@ -88,7 +88,7 @@ RcRHubUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 			}
 		}
 		
-		instanceRecord.setWorkflow(false);
+		//instanceRecord.setWorkflow(false);
 		instanceRecord.update();
 		return JSON.stringify(output);
 	},
@@ -139,14 +139,17 @@ RcRHubUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 			cmd = gs.getProperty('x_snc_rcr_hub.RCR_COMMAND_ON_DURATION');
 			duration = gs.getProperty('x_snc_rcr_hub.RCR_SLIDING_WINDOW');
 			cmd = cmd.replace('$1', instanceRecord.getValue('instance_name'));
-			cmd = cmd.replace('$2', duration);			
+			cmd = cmd.replace('$2', duration);
+			this.sendCommand(cmd);
 		}else {
 			cmd = gs.getProperty('x_snc_rcr_hub.RCR_COMMAND_ON_FILES');
 			files = this.getListOfFilesToReview();
-			cmd = cmd.replace('$1', instanceRecord.getValue('instance_name'));
-			cmd = cmd.replace('$2', files);				
+			if (files){
+				cmd = cmd.replace('$1', instanceRecord.getValue('instance_name'));
+				cmd = cmd.replace('$2', files);				
+				this.sendCommand(cmd);				
+			}
 		}
-		this.sendCommand(cmd);
 	},
 	
 	getListOfFilesToReview: function() {
@@ -162,7 +165,10 @@ RcRHubUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 			resultObj["type"] = gr.file_type;
 			result.push(resultObj);
 		}
-		return JSON.stringify(result);
+		if (result.length > 0 )
+			return JSON.stringify(result);
+		else 
+			return;
 	},
 	
 	sendCommand: function(command) {		
@@ -267,7 +273,7 @@ RcRHubUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
         <sys_created_on>2017-09-24 05:03:38</sys_created_on>
         <sys_customer_update>true</sys_customer_update>
         <sys_id>4239974fdb9dc3007236d9f0ce9619cc</sys_id>
-        <sys_mod_count>61</sys_mod_count>
+        <sys_mod_count>63</sys_mod_count>
         <sys_name>RcRHubUtils</sys_name>
         <sys_package display_value="RcR-Hub" source="x_snc_rcr_hub">fa919f87db9dc3007236d9f0ce961914</sys_package>
         <sys_policy>read</sys_policy>
@@ -275,6 +281,6 @@ RcRHubUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
         <sys_scope display_value="RcR-Hub">fa919f87db9dc3007236d9f0ce961914</sys_scope>
         <sys_update_name>sys_script_include_4239974fdb9dc3007236d9f0ce9619cc</sys_update_name>
         <sys_updated_by>pradeep.g</sys_updated_by>
-        <sys_updated_on>2017-10-31 16:41:17</sys_updated_on>
+        <sys_updated_on>2017-11-05 18:20:18</sys_updated_on>
     </sys_script_include>
 </record_update>

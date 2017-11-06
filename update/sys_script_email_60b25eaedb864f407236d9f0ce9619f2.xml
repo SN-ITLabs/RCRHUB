@@ -7,8 +7,11 @@
           /* Optional EmailOutbound */ email, /* Optional GlideRecord */ email_action,
           /* Optional GlideRecord */ event) {
 
+	template.print("<h6>To list below</h6>");
+	template.print(event.parm1);
+	template.print("<br></br>");
+	template.print("<h4>RCR Daily Findings</h4>");
 	template.print(event.parm2);
-	email.addAddress('chaitanya.saragadam@servicenow.com');
 
 })(current, template, email, email_action, event);]]></script>
         <sys_class_name>sys_script_email</sys_class_name>
@@ -16,7 +19,7 @@
         <sys_created_on>2017-10-29 17:28:17</sys_created_on>
         <sys_customer_update>true</sys_customer_update>
         <sys_id>60b25eaedb864f407236d9f0ce9619f2</sys_id>
-        <sys_mod_count>2</sys_mod_count>
+        <sys_mod_count>3</sys_mod_count>
         <sys_name>RCRReviewNotificationAlert</sys_name>
         <sys_package display_value="RcR-Hub" source="x_snc_rcr_hub">fa919f87db9dc3007236d9f0ce961914</sys_package>
         <sys_policy/>
@@ -24,6 +27,6 @@
         <sys_scope display_value="RcR-Hub">fa919f87db9dc3007236d9f0ce961914</sys_scope>
         <sys_update_name>sys_script_email_60b25eaedb864f407236d9f0ce9619f2</sys_update_name>
         <sys_updated_by>pradeep.g</sys_updated_by>
-        <sys_updated_on>2017-11-01 12:15:55</sys_updated_on>
+        <sys_updated_on>2017-11-06 05:23:56</sys_updated_on>
     </sys_script_email>
 </record_update>

@@ -2,7 +2,9 @@
 <record_update table="sys_properties">
     <sys_properties action="INSERT_OR_UPDATE">
         <choices/>
-        <description>//https://github.com/pradeep-gouribhatla/sn_rcr_v1</description>
+        <description>//https://github.com/pradeep-gouribhatla/sn_rcr_v1&#13;
+//https://github.com/SN-ITLabs/RcR-CLI.git&#13;
+</description>
         <ignore_cache>false</ignore_cache>
         <is_private>false</is_private>
         <name>x_snc_rcr_hub.rcr_remote_app_repo</name>
@@ -13,17 +15,17 @@
         <sys_created_on>2017-09-25 03:45:36</sys_created_on>
         <sys_customer_update>true</sys_customer_update>
         <sys_id>9ed0906fdb9907007236d9f0ce9619b6</sys_id>
-        <sys_mod_count>2</sys_mod_count>
+        <sys_mod_count>3</sys_mod_count>
         <sys_name>x_snc_rcr_hub.rcr_remote_app_repo</sys_name>
         <sys_package display_value="RcR-Hub" source="x_snc_rcr_hub">fa919f87db9dc3007236d9f0ce961914</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="RcR-Hub">fa919f87db9dc3007236d9f0ce961914</sys_scope>
         <sys_update_name>sys_properties_9ed0906fdb9907007236d9f0ce9619b6</sys_update_name>
-        <sys_updated_by>chaitanya</sys_updated_by>
-        <sys_updated_on>2017-10-08 19:58:26</sys_updated_on>
+        <sys_updated_by>pradeep.g</sys_updated_by>
+        <sys_updated_on>2017-11-04 10:32:26</sys_updated_on>
         <type>string</type>
-        <value>https://github.com/SN-ITLabs/RcR-CLI.git</value>
+        <value>https://github.com/SN-ITLabs/RcR-Probe.git</value>
         <write_roles/>
     </sys_properties>
     <sys_translated_text action="delete_multiple" query="documentkey=9ed0906fdb9907007236d9f0ce9619b6"/>
