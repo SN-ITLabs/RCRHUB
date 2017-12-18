@@ -19,15 +19,15 @@
             <sys_domain_path>/</sys_domain_path>
             <sys_id>41fde62813c30300b1123192e144b06b</sys_id>
             <sys_mod_count>0</sys_mod_count>
-            <sys_name/>
-            <sys_package/>
+            <sys_name>syslog_email</sys_name>
+            <sys_package display_value="RcR-Hub" source="x_snc_rcr_hub">fa919f87db9dc3007236d9f0ce961914</sys_package>
             <sys_policy/>
             <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
             <sys_scope display_value="RcR-Hub">fa919f87db9dc3007236d9f0ce961914</sys_scope>
-            <sys_update_name/>
+            <sys_update_name>sys_ui_list_sys_email_b045856dc0a8006f0033127fe250c9e7_null</sys_update_name>
             <sys_updated_by>pradeep</sys_updated_by>
             <sys_updated_on>2017-12-12 07:19:10</sys_updated_on>
-            <sys_user display_value="Pradeep G">016afc0113da0300b1123192e144b080</sys_user>
+            <sys_user display_value="">016afc0113da0300b1123192e144b080</sys_user>
             <view display_value="Default view" name="NULL">Default view</view>
             <view_name/>
         </sys_ui_list>

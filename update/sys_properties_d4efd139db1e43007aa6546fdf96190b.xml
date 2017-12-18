@@ -11,7 +11,7 @@
         <sys_class_name>sys_properties</sys_class_name>
         <sys_created_by>pradeep</sys_created_by>
         <sys_created_on>2017-11-08 16:04:46</sys_created_on>
-        <sys_customer_update>true</sys_customer_update>
+        <sys_customer_update>false</sys_customer_update>
         <sys_id>d4efd139db1e43007aa6546fdf96190b</sys_id>
         <sys_mod_count>4</sys_mod_count>
         <sys_name>x_snc_rcr_hub.RCR_SUBSCRIBER_MANAGERS_LIST</sys_name>

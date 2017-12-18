@@ -18,12 +18,10 @@
         <provider_class/>
         <read_access>true</read_access>
         <super_class/>
-        <sys_class_code/>
         <sys_class_name>sys_db_object</sys_class_name>
-        <sys_class_path/>
         <sys_created_by>pradeep</sys_created_by>
         <sys_created_on>2017-11-06 09:20:47</sys_created_on>
-        <sys_customer_update>true</sys_customer_update>
+        <sys_customer_update>false</sys_customer_update>
         <sys_id>291fa5c1db5a03007aa6546fdf9619e8</sys_id>
         <sys_mod_count>0</sys_mod_count>
         <sys_name>Dev Managers</sys_name>

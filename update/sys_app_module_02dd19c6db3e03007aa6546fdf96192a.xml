@@ -27,7 +27,7 @@
         <sys_class_name>sys_app_module</sys_class_name>
         <sys_created_by>pradeep</sys_created_by>
         <sys_created_on>2017-12-04 07:05:23</sys_created_on>
-        <sys_customer_update>true</sys_customer_update>
+        <sys_customer_update>false</sys_customer_update>
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>02dd19c6db3e03007aa6546fdf96192a</sys_id>

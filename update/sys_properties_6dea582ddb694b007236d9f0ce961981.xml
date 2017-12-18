@@ -11,7 +11,7 @@
         <sys_class_name>sys_properties</sys_class_name>
         <sys_created_by>chaitanya</sys_created_by>
         <sys_created_on>2017-10-01 09:36:52</sys_created_on>
-        <sys_customer_update>true</sys_customer_update>
+        <sys_customer_update>false</sys_customer_update>
         <sys_id>6dea582ddb694b007236d9f0ce961981</sys_id>
         <sys_mod_count>3</sys_mod_count>
         <sys_name>x_snc_rcr_hub.rcrhub.midserver.name</sys_name>

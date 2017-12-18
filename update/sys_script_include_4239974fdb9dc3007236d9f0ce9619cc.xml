@@ -369,7 +369,7 @@ RcRHubUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
         <sys_class_name>sys_script_include</sys_class_name>
         <sys_created_by>chaitanya</sys_created_by>
         <sys_created_on>2017-09-24 05:03:38</sys_created_on>
-        <sys_customer_update>true</sys_customer_update>
+        <sys_customer_update>false</sys_customer_update>
         <sys_id>4239974fdb9dc3007236d9f0ce9619cc</sys_id>
         <sys_mod_count>87</sys_mod_count>
         <sys_name>RcRHubUtils</sys_name>

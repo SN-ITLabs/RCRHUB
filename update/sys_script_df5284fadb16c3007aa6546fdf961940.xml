@@ -66,7 +66,7 @@
         <sys_class_name>sys_script</sys_class_name>
         <sys_created_by>pradeep</sys_created_by>
         <sys_created_on>2017-11-11 11:55:58</sys_created_on>
-        <sys_customer_update>true</sys_customer_update>
+        <sys_customer_update>false</sys_customer_update>
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>df5284fadb16c3007aa6546fdf961940</sys_id>

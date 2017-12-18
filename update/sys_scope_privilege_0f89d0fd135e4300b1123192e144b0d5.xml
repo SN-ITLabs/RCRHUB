@@ -7,7 +7,7 @@
         <sys_class_name>sys_scope_privilege</sys_class_name>
         <sys_created_by>guest</sys_created_by>
         <sys_created_on>2017-11-08 10:56:06</sys_created_on>
-        <sys_customer_update>true</sys_customer_update>
+        <sys_customer_update>false</sys_customer_update>
         <sys_id>0f89d0fd135e4300b1123192e144b0d5</sys_id>
         <sys_mod_count>0</sys_mod_count>
         <sys_name>ScopedEmailWrapper</sys_name>

@@ -11,7 +11,7 @@
         <sys_class_name>sys_properties</sys_class_name>
         <sys_created_by>pradeep</sys_created_by>
         <sys_created_on>2017-11-08 16:37:05</sys_created_on>
-        <sys_customer_update>true</sys_customer_update>
+        <sys_customer_update>false</sys_customer_update>
         <sys_id>a94765f9db1e43007aa6546fdf96199b</sys_id>
         <sys_mod_count>0</sys_mod_count>
         <sys_name>x_snc_rcr_hub.RCR_INTEGRATOR_USER_NAME</sys_name>

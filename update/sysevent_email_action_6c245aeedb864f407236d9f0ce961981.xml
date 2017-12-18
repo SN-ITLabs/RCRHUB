@@ -6,7 +6,6 @@
         <active>true</active>
         <advanced_condition/>
         <affected_field_on_event/>
-        <category display_value="Uncategorized">c97d83137f4432005f58108c3ffa917a</category>
         <collection/>
         <condition/>
         <content_type>multipart/mixed</content_type>
@@ -43,7 +42,7 @@
         <sys_class_name>sysevent_email_action</sys_class_name>
         <sys_created_by>anil.akula</sys_created_by>
         <sys_created_on>2017-10-29 17:31:59</sys_created_on>
-        <sys_customer_update>true</sys_customer_update>
+        <sys_customer_update>false</sys_customer_update>
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>6c245aeedb864f407236d9f0ce961981</sys_id>

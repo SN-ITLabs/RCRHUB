@@ -14,7 +14,7 @@
             <sys_class_name>sys_ui_list</sys_class_name>
             <sys_created_by>pradeep</sys_created_by>
             <sys_created_on>2017-11-08 10:56:55</sys_created_on>
-            <sys_customer_update>true</sys_customer_update>
+            <sys_customer_update>false</sys_customer_update>
             <sys_domain>global</sys_domain>
             <sys_domain_path>/</sys_domain_path>
             <sys_id>beb91cf9db9a43007aa6546fdf96190f</sys_id>
@@ -27,7 +27,7 @@
             <sys_update_name>sys_ui_list_sys_email_b045856dc0a8006f0033127fe250c9e7_inbox</sys_update_name>
             <sys_updated_by>pradeep</sys_updated_by>
             <sys_updated_on>2017-11-08 10:56:55</sys_updated_on>
-            <sys_user display_value="Pradeep G">016afc0113da0300b1123192e144b080</sys_user>
+            <sys_user display_value="">016afc0113da0300b1123192e144b080</sys_user>
             <view display_value="Inbox" name="inbox">027342480a0a0b6100b3776e6a02ed50</view>
             <view_name/>
         </sys_ui_list>

@@ -52,7 +52,7 @@
         <sys_class_name>sys_script_email</sys_class_name>
         <sys_created_by>anil.akula</sys_created_by>
         <sys_created_on>2017-10-29 17:28:17</sys_created_on>
-        <sys_customer_update>true</sys_customer_update>
+        <sys_customer_update>false</sys_customer_update>
         <sys_id>60b25eaedb864f407236d9f0ce9619f2</sys_id>
         <sys_mod_count>23</sys_mod_count>
         <sys_name>RCRReviewNotificationAlert</sys_name>

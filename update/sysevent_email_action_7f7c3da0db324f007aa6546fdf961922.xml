@@ -6,7 +6,6 @@
         <active>true</active>
         <advanced_condition/>
         <affected_field_on_event/>
-        <category display_value="MID Server">ad8d324713720300b1123192e144b0dc</category>
         <collection>ecc_agent</collection>
         <condition table="ecc_agent">name=RCR_MID_01^status!=Up^EQ<item endquery="false" field="name" goto="false" newquery="false" operator="=" or="false" value="RCR_MID_01"/>
             <item endquery="false" field="status" goto="false" newquery="false" operator="!=" or="false" value="Up"/>
@@ -47,7 +46,7 @@
         <sys_class_name>sysevent_email_action</sys_class_name>
         <sys_created_by>pradeep</sys_created_by>
         <sys_created_on>2017-11-29 17:36:19</sys_created_on>
-        <sys_customer_update>true</sys_customer_update>
+        <sys_customer_update>false</sys_customer_update>
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>7f7c3da0db324f007aa6546fdf961922</sys_id>

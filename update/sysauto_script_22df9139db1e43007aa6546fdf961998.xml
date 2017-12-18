@@ -5,7 +5,7 @@
         <condition/>
         <conditional>false</conditional>
         <name>Update Dev Managers </name>
-        <run_as display_value="Pradeep G">016afc0113da0300b1123192e144b080</run_as>
+        <run_as display_value="">016afc0113da0300b1123192e144b080</run_as>
         <run_as_tz/>
         <run_dayofmonth>1</run_dayofmonth>
         <run_dayofweek>1</run_dayofweek>
@@ -84,7 +84,7 @@ function updateUsers(m_user, userList){
         <sys_class_name>sysauto_script</sys_class_name>
         <sys_created_by>pradeep</sys_created_by>
         <sys_created_on>2017-11-08 17:23:15</sys_created_on>
-        <sys_customer_update>true</sys_customer_update>
+        <sys_customer_update>false</sys_customer_update>
         <sys_id>22df9139db1e43007aa6546fdf961998</sys_id>
         <sys_mod_count>4</sys_mod_count>
         <sys_name>Update Dev Managers </sys_name>

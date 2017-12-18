@@ -53,7 +53,7 @@
         <sys_created_by>chaitanya</sys_created_by>
         <sys_created_on>2017-09-24 04:47:07</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
-        <sys_id>7acb8981db1a03007aa6546fdf961948</sys_id>
+        <sys_id>0a6eaba66f0b4300f928c8c17c3ee4d8</sys_id>
         <sys_mod_count>0</sys_mod_count>
         <sys_name>Additional Comments</sys_name>
         <sys_package display_value="RcR-Hub" source="x_snc_rcr_hub">fa919f87db9dc3007236d9f0ce961914</sys_package>
@@ -62,7 +62,7 @@
         <sys_scope display_value="RcR-Hub">fa919f87db9dc3007236d9f0ce961914</sys_scope>
         <sys_update_name>sys_dictionary_x_snc_rcr_hub_review_results_additional_comments</sys_update_name>
         <sys_updated_by>system</sys_updated_by>
-        <sys_updated_on>2017-11-06 06:40:25</sys_updated_on>
+        <sys_updated_on>2017-12-18 17:08:54</sys_updated_on>
         <table_reference>false</table_reference>
         <text_index>false</text_index>
         <unique>false</unique>
