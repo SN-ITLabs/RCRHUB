@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update sys_domain="global" table="sysevent_in_email_action">
+    <sysevent_in_email_action action="INSERT_OR_UPDATE">
+        <action>record_action</action>
+        <active>true</active>
+        <assignment_operator/>
+        <condition_script/>
+        <description/>
+        <event_name>email.read</event_name>
+        <filter_condition table="sys_email">recipients=tools4it+rcr+ignore@service-now.com^EQ<item endquery="false" field="recipients" goto="false" newquery="false" operator="=" or="false" value="tools4it+rcr+ignore@service-now.com"/>
+            <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
+        </filter_condition>
+        <from/>
+        <name>Mark RCR Ignores</name>
+        <order>100</order>
+        <reply_email/>
+        <required_roles/>
+        <script><![CDATA[(function runAction(/*GlideRecord*/ current, /*GlideRecord*/ event, /*EmailWrapper*/ email, /*ScopedEmailLogger*/ logger, /*EmailClassifier*/ classifier) {
+
+	gs.info('in rcr ignores email action');
+
+	var emailBody = email.body_html;
+	var sender = email.from + '';
+	
+	if (!emailBody) return;
+	
+	emailBody = emailBody.replace(/<\s*.*?>/g,'').replace(/&nbsp;/g,' ').replace(/\n/g,'');
+	
+	var regex = new RegExp(/RR\d{7};[\w\s-&\/\\:_\.]+;/gm);
+						   
+	var rgxResults = '', reviewsToBeIgnored = [];
+	
+	while( (rgxResults = regex.exec(emailBody)) != null){
+		
+		if (!rgxResults && !rgxResults[0]) continue;
+		
+		var _reviewLine = rgxResults[0];
+		var _reviewObj = _reviewLine.split(';');
+		
+		if (_reviewObj && Array.isArray(_reviewObj) && _reviewObj.length >= 2 ){
+			
+			reviewsToBeIgnored.push({
+				number : _reviewObj[0],
+				desc : _reviewObj[1]
+			});
+		}
+	}
+	
+	gs.info('reviewsToBeIgnored ' + JSON.stringify(reviewsToBeIgnored));
+	
+	for(var i in reviewsToBeIgnored){
+		var reviewObj = reviewsToBeIgnored[i];
+		
+		gs.info('Review number ' + reviewObj.number);
+		
+		var rvGR = new GlideRecord('x_snc_rcr_hub_review_results');
+		rvGR.addQuery('number', reviewObj.number);
+		rvGR.query();
+		if(rvGR.next()) {
+			upsertIgnoreFinding(rvGR, reviewObj.desc);
+			rvGR.deleteRecord();
+		}
+	}
+	
+	function upsertIgnoreFinding (rvGR, desc){
+		if (!rvGR) return;
+		
+		var igRGR = new GlideRecord("x_snc_rcr_hub_ignored_review_results");
+		igRGR.addQuery("instance_name", rvGR.getValue("instance_name"));
+		igRGR.addQuery("file_id", rvGR.getValue("file_id"));
+		igRGR.addQuery("version_id", rvGR.getValue("version_id"));
+		igRGR.addQuery("line_number", rvGR.getValue("line_number"));
+		igRGR.addQuery("rule_number", rvGR.getValue("rule_number"));
+		igRGR.query();
+		if (igRGR.next()) {
+			igRGR.setValue("ignored_by", sender);
+			igRGR.setValue("review_status" ,'ignored');
+			igRGR.setValue("additional_comments", desc);			
+			igRGR.update();
+		} else {
+			igRGR.initialize();
+			igRGR.setValue("review_status" ,'ignored');
+			igRGR.setValue("developer", rvGR.getValue("developer"));
+			igRGR.setValue("error_level", rvGR.getValue("error_level"));
+			igRGR.setValue("file_id", rvGR.getValue("file_id"));
+			igRGR.setValue("version_id", rvGR.getValue("version_id"));
+			igRGR.setValue("file_name", rvGR.getValue("file_name"));
+			igRGR.setValue("file_type", rvGR.getValue("file_type"));
+			igRGR.setValue("instance_name", rvGR.getValue("instance_name"));
+			igRGR.setValue("line_number", rvGR.getValue("line_number"));
+			igRGR.setValue("occurrence", rvGR.getValue("occurrence"));
+			igRGR.setValue("review_comments", rvGR.getValue("review_comments"));
+			igRGR.setValue("review_last_seen", rvGR.getValue("review_last_seen"));
+			igRGR.setValue("rule_description", rvGR.getValue("rule_description"));
+			igRGR.setValue("rule_name", rvGR.getValue("rule_name"));
+			igRGR.setValue("rule_number", rvGR.getValue("rule_number"));
+			igRGR.setValue("additional_comments", desc);
+			igRGR.setValue("ignored_by", sender);
+			igRGR.insert();
+		}
+	}
+
+
+})(current, event, email, logger, classifier);]]></script>
+        <stop_processing>false</stop_processing>
+        <sys_class_name>sysevent_in_email_action</sys_class_name>
+        <sys_created_by>pradeep</sys_created_by>
+        <sys_created_on>2017-11-08 10:51:09</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>a1ec44b5db9a43007aa6546fdf961907</sys_id>
+        <sys_mod_count>26</sys_mod_count>
+        <sys_name>Mark RCR Ignores</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="RcR-Hub" source="x_snc_rcr_hub">fa919f87db9dc3007236d9f0ce961914</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="RcR-Hub">fa919f87db9dc3007236d9f0ce961914</sys_scope>
+        <sys_update_name>sysevent_in_email_action_a1ec44b5db9a43007aa6546fdf961907</sys_update_name>
+        <sys_updated_by>pradeep</sys_updated_by>
+        <sys_updated_on>2017-12-12 07:23:29</sys_updated_on>
+        <table>x_snc_rcr_hub_review_results</table>
+        <template/>
+        <type/>
+    </sysevent_in_email_action>
+</record_update>

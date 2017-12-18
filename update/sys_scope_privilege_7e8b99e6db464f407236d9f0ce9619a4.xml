@@ -7,7 +7,7 @@
         <sys_class_name>sys_scope_privilege</sys_class_name>
         <sys_created_by>anil.akula</sys_created_by>
         <sys_created_on>2017-10-29 13:24:12</sys_created_on>
-        <sys_customer_update>true</sys_customer_update>
+        <sys_customer_update>false</sys_customer_update>
         <sys_id>7e8b99e6db464f407236d9f0ce9619a4</sys_id>
         <sys_mod_count>0</sys_mod_count>
         <sys_name>GlideRecord.updateMultiple</sys_name>

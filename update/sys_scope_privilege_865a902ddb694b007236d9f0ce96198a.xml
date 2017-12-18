@@ -7,7 +7,7 @@
         <sys_class_name>sys_scope_privilege</sys_class_name>
         <sys_created_by>mid.server</sys_created_by>
         <sys_created_on>2017-10-01 09:34:01</sys_created_on>
-        <sys_customer_update>true</sys_customer_update>
+        <sys_customer_update>false</sys_customer_update>
         <sys_id>865a902ddb694b007236d9f0ce96198a</sys_id>
         <sys_mod_count>0</sys_mod_count>
         <sys_name>ecc_queue</sys_name>

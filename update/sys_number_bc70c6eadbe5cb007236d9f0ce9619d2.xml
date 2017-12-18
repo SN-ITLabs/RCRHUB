@@ -8,7 +8,7 @@
         <sys_class_name>sys_number</sys_class_name>
         <sys_created_by>chaitanya</sys_created_by>
         <sys_created_on>2017-10-04 19:34:03</sys_created_on>
-        <sys_customer_update>true</sys_customer_update>
+        <sys_customer_update>false</sys_customer_update>
         <sys_id>bc70c6eadbe5cb007236d9f0ce9619d2</sys_id>
         <sys_mod_count>0</sys_mod_count>
         <sys_name>RR</sys_name>

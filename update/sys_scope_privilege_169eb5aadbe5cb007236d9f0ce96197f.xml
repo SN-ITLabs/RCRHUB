@@ -7,7 +7,7 @@
         <sys_class_name>sys_scope_privilege</sys_class_name>
         <sys_created_by>mid.server</sys_created_by>
         <sys_created_on>2017-10-04 19:25:57</sys_created_on>
-        <sys_customer_update>true</sys_customer_update>
+        <sys_customer_update>false</sys_customer_update>
         <sys_id>169eb5aadbe5cb007236d9f0ce96197f</sys_id>
         <sys_mod_count>0</sys_mod_count>
         <sys_name>GlideRecord.setValue</sys_name>

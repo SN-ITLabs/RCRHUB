@@ -11,19 +11,19 @@
         <sys_class_name>sys_properties</sys_class_name>
         <sys_created_by>pradeep.g</sys_created_by>
         <sys_created_on>2017-11-04 16:24:11</sys_created_on>
-        <sys_customer_update>true</sys_customer_update>
+        <sys_customer_update>false</sys_customer_update>
         <sys_id>dcfd7c68dbd24380a86a5404ce96195a</sys_id>
-        <sys_mod_count>0</sys_mod_count>
+        <sys_mod_count>1</sys_mod_count>
         <sys_name>x_snc_rcr_hub.RCR_COMMAND_INSTANCE_SAVE</sys_name>
         <sys_package display_value="RcR-Hub" source="x_snc_rcr_hub">fa919f87db9dc3007236d9f0ce961914</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="RcR-Hub">fa919f87db9dc3007236d9f0ce961914</sys_scope>
         <sys_update_name>sys_properties_dcfd7c68dbd24380a86a5404ce96195a</sys_update_name>
-        <sys_updated_by>pradeep.g</sys_updated_by>
-        <sys_updated_on>2017-11-04 16:24:11</sys_updated_on>
+        <sys_updated_by>pradeep</sys_updated_by>
+        <sys_updated_on>2017-12-12 05:01:13</sys_updated_on>
         <type>string</type>
-        <value>crnow --saveconfig --instance $1 --user $2 --password $3</value>
+        <value>crnow --saveinsconfig --instance $1 --basicauth $2</value>
         <write_roles/>
     </sys_properties>
     <sys_translated_text action="delete_multiple" query="documentkey=dcfd7c68dbd24380a86a5404ce96195a"/>

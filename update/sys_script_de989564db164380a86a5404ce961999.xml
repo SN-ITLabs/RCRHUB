@@ -33,29 +33,38 @@
         <role_conditions/>
         <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
 
-	var hubUtil = new x_snc_rcr_hub.RcRHubUtils();
 	var instance = current.getValue('instance_name');
 	var username = current.getValue('user_name');
 	var password = current.password.getDecryptedValue();
-	
-	if (!instance || !username || !password) return;
 
-	var cmd = gs.getProperty('x_snc_rcr_hub.RCR_COMMAND_INSTANCE_SAVE');
-	cmd = cmd.replace('$1', instance);
-	cmd = cmd.replace('$2', username);
-	cmd = cmd.replace('$3', password);
+	if (!instance || !username || !password) {
+		gs.addErrorMessage('Empty username or password');
+		return;
+	}
 	
+	var basicAuthStr = gs.base64Encode(username+ ":" + password);
+	
+	var cmd = gs.getProperty('x_snc_rcr_hub.RCR_COMMAND_INSTANCE_SAVE');
+	if (!cmd) {
+		gs.error('RCR INS CONFIG : RCR_COMMAND_INSTANCE_SAVE sys property not found or empty');
+		return;
+	}
+	
+	cmd = cmd.replace('$1', instance);
+	cmd = cmd.replace('$2', basicAuthStr);
+	
+	var hubUtil = new x_snc_rcr_hub.RcRHubUtils();
 	hubUtil.sendCommand(cmd);
 
 })(current, previous);]]></script>
         <sys_class_name>sys_script</sys_class_name>
         <sys_created_by>pradeep.g</sys_created_by>
         <sys_created_on>2017-11-04 18:20:23</sys_created_on>
-        <sys_customer_update>true</sys_customer_update>
+        <sys_customer_update>false</sys_customer_update>
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>de989564db164380a86a5404ce961999</sys_id>
-        <sys_mod_count>2</sys_mod_count>
+        <sys_mod_count>3</sys_mod_count>
         <sys_name>Save instance config to MID server NPM</sys_name>
         <sys_overrides/>
         <sys_package display_value="RcR-Hub" source="x_snc_rcr_hub">fa919f87db9dc3007236d9f0ce961914</sys_package>
@@ -63,8 +72,8 @@
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="RcR-Hub">fa919f87db9dc3007236d9f0ce961914</sys_scope>
         <sys_update_name>sys_script_de989564db164380a86a5404ce961999</sys_update_name>
-        <sys_updated_by>pradeep.g</sys_updated_by>
-        <sys_updated_on>2017-11-05 18:11:49</sys_updated_on>
+        <sys_updated_by>pradeep</sys_updated_by>
+        <sys_updated_on>2017-12-13 05:31:44</sys_updated_on>
         <template/>
         <when>after</when>
     </sys_script>

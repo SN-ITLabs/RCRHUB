@@ -13,15 +13,15 @@
         <sys_class_name>ua_table_licensing_config</sys_class_name>
         <sys_created_by>chaitanya</sys_created_by>
         <sys_created_on>2017-09-24 04:54:09</sys_created_on>
-        <sys_customer_update>true</sys_customer_update>
-        <sys_id>de27178bdb9dc3007236d9f0ce961931</sys_id>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>a7cbc981db1a03007aa6546fdf961916</sys_id>
         <sys_mod_count>0</sys_mod_count>
         <sys_name>x_snc_rcr_hub_instance_watch</sys_name>
         <sys_package display_value="RcR-Hub" source="x_snc_rcr_hub">fa919f87db9dc3007236d9f0ce961914</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="RcR-Hub">fa919f87db9dc3007236d9f0ce961914</sys_scope>
-        <sys_update_name>ua_table_licensing_config_de27178bdb9dc3007236d9f0ce961931</sys_update_name>
+        <sys_update_name>ua_table_licensing_config_a7cbc981db1a03007aa6546fdf961916</sys_update_name>
         <sys_updated_by>chaitanya</sys_updated_by>
         <sys_updated_on>2017-09-24 04:54:09</sys_updated_on>
     </ua_table_licensing_config>

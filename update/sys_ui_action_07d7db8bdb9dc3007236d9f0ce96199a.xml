@@ -10,6 +10,7 @@
         <form_button>true</form_button>
         <form_context_menu>false</form_context_menu>
         <form_link>false</form_link>
+        <form_style/>
         <hint/>
         <list_action>true</list_action>
         <list_banner_button>false</list_banner_button>
@@ -18,6 +19,7 @@
         <list_context_menu>true</list_context_menu>
         <list_link>false</list_link>
         <list_save_with_form_button>false</list_save_with_form_button>
+        <list_style/>
         <name>Setup</name>
         <onclick>setup()</onclick>
         <order>100</order>
@@ -73,7 +75,7 @@
         <sys_class_name>sys_ui_action</sys_class_name>
         <sys_created_by>chaitanya</sys_created_by>
         <sys_created_on>2017-09-24 05:08:25</sys_created_on>
-        <sys_customer_update>true</sys_customer_update>
+        <sys_customer_update>false</sys_customer_update>
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>07d7db8bdb9dc3007236d9f0ce96199a</sys_id>

@@ -42,7 +42,7 @@ if(statusCode == 200){
         <sys_class_name>sysevent_script_action</sys_class_name>
         <sys_created_by>chaitanya</sys_created_by>
         <sys_created_on>2017-09-25 03:03:41</sys_created_on>
-        <sys_customer_update>true</sys_customer_update>
+        <sys_customer_update>false</sys_customer_update>
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>c075cce7db9907007236d9f0ce9619b5</sys_id>

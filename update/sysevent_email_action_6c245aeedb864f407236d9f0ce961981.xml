@@ -6,12 +6,13 @@
         <active>true</active>
         <advanced_condition/>
         <affected_field_on_event/>
+        <category display_value="Uncategorized">c97d83137f4432005f58108c3ffa917a</category>
         <collection/>
         <condition/>
         <content_type>multipart/mixed</content_type>
         <description/>
         <event_name>x_snc_rcr_hub.scheduled.notification</event_name>
-        <event_parm_1>false</event_parm_1>
+        <event_parm_1>true</event_parm_1>
         <event_parm_2>false</event_parm_2>
         <exclude_delegates>false</exclude_delegates>
         <force_delivery>false</force_delivery>
@@ -32,7 +33,7 @@
         <push_message_only>false</push_message_only>
         <recipient_fields/>
         <recipient_groups/>
-        <recipient_users>c2d3fb45db3f7600a86a5404ce9619d5,c19faa99db480f00a86a5404ce9619eb</recipient_users>
+        <recipient_users/>
         <reply_to/>
         <send_self>false</send_self>
         <sms_alternate/>
@@ -46,7 +47,7 @@
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>6c245aeedb864f407236d9f0ce961981</sys_id>
-        <sys_mod_count>11</sys_mod_count>
+        <sys_mod_count>13</sys_mod_count>
         <sys_name>DailyReviewFindings</sys_name>
         <sys_overrides/>
         <sys_package display_value="RcR-Hub" source="x_snc_rcr_hub">fa919f87db9dc3007236d9f0ce961914</sys_package>
@@ -54,8 +55,8 @@
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="RcR-Hub">fa919f87db9dc3007236d9f0ce961914</sys_scope>
         <sys_update_name>sysevent_email_action_6c245aeedb864f407236d9f0ce961981</sys_update_name>
-        <sys_updated_by>pradeep.g</sys_updated_by>
-        <sys_updated_on>2017-11-06 05:20:12</sys_updated_on>
+        <sys_updated_by>system</sys_updated_by>
+        <sys_updated_on>2017-12-07 16:36:20</sys_updated_on>
         <sys_version>2</sys_version>
         <template/>
         <type>email</type>

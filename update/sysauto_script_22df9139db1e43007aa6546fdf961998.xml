@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sysauto_script">
+    <sysauto_script action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <condition/>
+        <conditional>false</conditional>
+        <name>Update Dev Managers </name>
+        <run_as display_value="Pradeep G">016afc0113da0300b1123192e144b080</run_as>
+        <run_as_tz/>
+        <run_dayofmonth>1</run_dayofmonth>
+        <run_dayofweek>1</run_dayofweek>
+        <run_period/>
+        <run_start>2017-11-08 16:03:16</run_start>
+        <run_time>1970-01-01 14:00:00</run_time>
+        <run_type>weekly</run_type>
+        <script><![CDATA[updateAllUsers();
+
+function updateAllUsers(){
+	
+	var mangersList = gs.getProperty('x_snc_rcr_hub.RCR_SUBSCRIBER_MANAGERS_LIST');
+	if(!mangersList) return;
+	mangersList = mangersList.split(',');
+	
+	for(var m in mangersList){
+		var m_user = mangersList[m];
+		
+		var usersList = getMUsers(m_user);
+		
+		updateUsers(m_user, usersList);
+	}
+}
+
+function getMUsers(m_user){
+	var userList = [];
+	var uname = gs.getProperty('x_snc_rcr_hub.RCR_INTEGRATOR_USER_NAME');
+	var upass = gs.getProperty('x_snc_rcr_hub.RCR_INTEGRATOR_PASS');
+
+	try {
+		var endpoint = "https://surf.service-now.com/api/now/table/sys_user?sysparm_query=manager.user_name%3D"+m_user+"%5Eactive%3Dtrue&sysparm_fields=user_name";
+		var restMessage = new sn_ws.RESTMessageV2();
+		restMessage.setBasicAuth(uname,upass);
+		restMessage.setHttpMethod("GET");
+		restMessage.setEndpoint(endpoint);
+
+		var response = restMessage.execute();
+		if (response.getBody()){
+			var restMessages = JSON.parse(response.getBody());
+			if (restMessages && restMessages.result){
+				var userObjs = restMessages.result;
+				for(var idx in userObjs){
+					userList.push(userObjs[idx]['user_name']);
+				}
+			}
+		}
+		return userList;
+	} catch(e){
+		gs.error('Unexpected error syncing users.');
+	}		
+}
+
+function updateUsers(m_user, userList){
+	if (!m_user || userList.length <= 0 ) return;
+    
+    //TODO:: REVIST this, do not delete just update?
+    var resGR = new GlideRecord('x_snc_rcr_hub_dev_managers');
+    resGR.addQuery('manager', m_user);
+    resGR.deleteMultiple();    
+
+	for (var idx in userList){
+        var gr = new GlideRecord('x_snc_rcr_hub_dev_managers');
+        gr.initialize();
+        gr.setValue('manager', m_user);
+        gr.setValue('developer', userList[idx]);
+        gr.insert();  
+	}
+    
+    // insert manager record to self
+    var mnGR = new GlideRecord('x_snc_rcr_hub_dev_managers');
+    mnGR.initialize();
+    mnGR.setValue('manager', m_user);
+    mnGR.setValue('developer',m_user);
+    mnGR.insert();  
+}]]></script>
+        <sys_class_name>sysauto_script</sys_class_name>
+        <sys_created_by>pradeep</sys_created_by>
+        <sys_created_on>2017-11-08 17:23:15</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>22df9139db1e43007aa6546fdf961998</sys_id>
+        <sys_mod_count>4</sys_mod_count>
+        <sys_name>Update Dev Managers </sys_name>
+        <sys_package display_value="RcR-Hub" source="x_snc_rcr_hub">fa919f87db9dc3007236d9f0ce961914</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="RcR-Hub">fa919f87db9dc3007236d9f0ce961914</sys_scope>
+        <sys_update_name>sysauto_script_22df9139db1e43007aa6546fdf961998</sys_update_name>
+        <sys_updated_by>pradeep</sys_updated_by>
+        <sys_updated_on>2017-11-08 17:31:32</sys_updated_on>
+        <upgrade_safe>false</upgrade_safe>
+    </sysauto_script>
+</record_update>

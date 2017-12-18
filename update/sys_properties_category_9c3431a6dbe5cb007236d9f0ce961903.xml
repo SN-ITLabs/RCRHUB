@@ -5,7 +5,7 @@
         <sys_class_name>sys_properties_category</sys_class_name>
         <sys_created_by>chaitanya</sys_created_by>
         <sys_created_on>2017-10-04 18:40:48</sys_created_on>
-        <sys_customer_update>true</sys_customer_update>
+        <sys_customer_update>false</sys_customer_update>
         <sys_id>9c3431a6dbe5cb007236d9f0ce961903</sys_id>
         <sys_mod_count>0</sys_mod_count>
         <sys_name>RCR HUB Configurations</sys_name>

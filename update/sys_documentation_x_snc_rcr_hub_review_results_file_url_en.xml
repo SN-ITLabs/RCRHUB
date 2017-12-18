@@ -12,7 +12,7 @@
             <sys_class_name>sys_documentation</sys_class_name>
             <sys_created_by>chaitanya</sys_created_by>
             <sys_created_on>2017-10-04 20:11:09</sys_created_on>
-            <sys_customer_update>true</sys_customer_update>
+            <sys_customer_update>false</sys_customer_update>
             <sys_id>d8f84a22db29cb007236d9f0ce9619f3</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_name>File URL</sys_name>

@@ -41,7 +41,7 @@
         <sys_class_name>sys_script</sys_class_name>
         <sys_created_by>chaitanya</sys_created_by>
         <sys_created_on>2017-10-01 09:20:35</sys_created_on>
-        <sys_customer_update>true</sys_customer_update>
+        <sys_customer_update>false</sys_customer_update>
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>fe151869db694b007236d9f0ce9619f6</sys_id>

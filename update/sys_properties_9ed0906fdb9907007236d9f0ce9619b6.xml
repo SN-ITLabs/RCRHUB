@@ -13,7 +13,7 @@
         <sys_class_name>sys_properties</sys_class_name>
         <sys_created_by>chaitanya</sys_created_by>
         <sys_created_on>2017-09-25 03:45:36</sys_created_on>
-        <sys_customer_update>true</sys_customer_update>
+        <sys_customer_update>false</sys_customer_update>
         <sys_id>9ed0906fdb9907007236d9f0ce9619b6</sys_id>
         <sys_mod_count>3</sys_mod_count>
         <sys_name>x_snc_rcr_hub.rcr_remote_app_repo</sys_name>

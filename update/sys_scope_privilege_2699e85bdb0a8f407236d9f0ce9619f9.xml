@@ -7,7 +7,7 @@
         <sys_class_name>sys_scope_privilege</sys_class_name>
         <sys_created_by>pradeep.g</sys_created_by>
         <sys_created_on>2017-10-31 17:41:27</sys_created_on>
-        <sys_customer_update>true</sys_customer_update>
+        <sys_customer_update>false</sys_customer_update>
         <sys_id>2699e85bdb0a8f407236d9f0ce9619f9</sys_id>
         <sys_mod_count>0</sys_mod_count>
         <sys_name>sys_update_version</sys_name>

@@ -12,7 +12,7 @@
             <sys_class_name>sys_documentation</sys_class_name>
             <sys_created_by>chaitanya</sys_created_by>
             <sys_created_on>2017-10-04 19:49:42</sys_created_on>
-            <sys_customer_update>true</sys_customer_update>
+            <sys_customer_update>false</sys_customer_update>
             <sys_id>0604c26edbe5cb007236d9f0ce96197d</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_name>Ignored Review Results</sys_name>

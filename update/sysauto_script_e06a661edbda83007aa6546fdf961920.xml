@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sysauto_script">
+    <sysauto_script action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <condition/>
+        <conditional>false</conditional>
+        <name>Delete ignored findings</name>
+        <run_as display_value="">c19faa99db480f00a86a5404ce9619eb</run_as>
+        <run_as_tz/>
+        <run_dayofmonth>1</run_dayofmonth>
+        <run_dayofweek>1</run_dayofweek>
+        <run_period>1970-01-01 09:00:00</run_period>
+        <run_start>2017-11-01 07:00:00</run_start>
+        <run_time>1970-01-02 03:00:00</run_time>
+        <run_type>daily</run_type>
+        <script><![CDATA[var durationHrs = 4; // Find all the open defects created in last 4 fours
+var fileLineMapping = {};
+
+// Check if there are any ignores on each file and mark the duplicates
+var reviewdFilesGR = new GlideAggregate('x_snc_rcr_hub_review_results');
+reviewdFilesGR.addEncodedQuery("review_last_seen>javascript:gs.hoursAgo(" +durationHrs+ ")^review_status=open");
+reviewdFilesGR.groupBy('instance_name');
+reviewdFilesGR.groupBy('file_id');
+reviewdFilesGR.groupBy('rule_number');
+reviewdFilesGR.query();
+
+while (reviewdFilesGR.next()) {
+    var _rvFileId = reviewdFilesGR.getValue('file_id');
+    var _rvRuleNumber = reviewdFilesGR.getValue('rule_number');
+    var _rvInstanceName = reviewdFilesGR.getValue('instance_name');
+
+    // Check if there are any ignores on this file
+    var igReviewsGR = new GlideAggregate('x_snc_rcr_hub_ignored_review_results');
+    igReviewsGR.addQuery('instance_name', _rvInstanceName);
+    igReviewsGR.addQuery('file_id', _rvFileId);
+    igReviewsGR.addQuery('rule_number', _rvRuleNumber);
+    igReviewsGR.addAggregate('COUNT');
+    igReviewsGR.query();
+    
+    if (igReviewsGR.next() && igReviewsGR.getAggregate('COUNT') > 0) {
+        gs.info('Ignores count for file(' + _rvFileId + ') => ' + igReviewsGR.getAggregate('COUNT'));
+        // Get ignored items on this file
+        var crReviewGR = new GlideRecord('x_snc_rcr_hub_review_results');
+        crReviewGR.addEncodedQuery("review_last_seen>javascript:gs.hoursAgo(" + durationHrs + ")^review_status=open");
+        crReviewGR.addQuery("instance_name",_rvInstanceName);
+        crReviewGR.addQuery("file_id",_rvFileId);
+        crReviewGR.addQuery('rule_number', _rvRuleNumber);
+        crReviewGR.query();
+        
+        while(crReviewGR.next()) {
+            gs.info('Ignores present for this review file : ' 
+                    + crReviewGR.getValue('file_name') + ' on RULE - ' + _rvRuleNumber);
+
+            var _fileId = crReviewGR.getValue("file_id");
+            var _fileType = crReviewGR.getValue("file_type");
+            var _versionId = crReviewGR.getValue("version_id");
+            var _lineNumber = crReviewGR.getValue("line_number");
+            var _instanceName = crReviewGR.getValue('instance_name');
+                
+            var igReviewGR = new GlideRecord('x_snc_rcr_hub_ignored_review_results');
+            igReviewGR.addQuery('instance_name', _instanceName);
+            igReviewGR.addQuery('file_id', _fileId);
+            igReviewGR.addQuery('rule_number', crReviewGR.getValue("rule_number"));
+            igReviewGR.query();
+            var _ignoredFileVersion, _ignored = false, ignoredLineNumbers = [];
+            while (igReviewGR.next()) {
+                // gs.info('Ignore review line number : ' + igReviewGR.getValue('line_number'));
+                // gs.info('Cuurent review line number : ' + crReviewGR.getValue('line_number'));
+                _ignoredFileVersion = igReviewGR.getValue('version_id');
+                var _ignoredLineNumber  = igReviewGR.getValue('line_number');
+                gs.info(_ignoredFileVersion + ' == ' +  _versionId );
+                gs.info(_ignoredLineNumber + '  ==  ' + _lineNumber);
+                if (_ignoredFileVersion == _versionId && _ignoredLineNumber == _lineNumber){
+                    crReviewGR.deleteRecord();
+                    _ignored = true;
+                    gs.info('Ignored review number before line mapping, file : ' + _fileId )
+                }
+                ignoredLineNumbers.push(_ignoredLineNumber);
+            }
+
+            gs.info('IgnoredLineNumbers array :: ' + ignoredLineNumbers)
+
+            /*
+            If this file has ignores for the same rule and but the line number doesn't match,
+            then check if this particular REVIEW FINDING is already ignored in some specific version (on a different line)
+            */
+            if(!_ignored && _ignoredFileVersion != _versionId){
+                if (!fileLineMapping[_fileId]){
+                    fileLineMapping[_fileId] = getFileLineMapping(_instanceName, _fileId, _fileType, _ignoredFileVersion);
+                    gs.info('FileLineMapping for file (' + _fileId + ') =>' + JSON.stringify(fileLineMapping));
+                }
+                var thisFileLineMapping = fileLineMapping[_fileId];
+                if (thisFileLineMapping){
+                    ignoredLineNumbers.forEach(function(ingnoredLine) {
+                        if (thisFileLineMapping[ingnoredLine] == _lineNumber){
+                            crReviewGR.deleteRecord();
+                            gs.info('Found IGNORE in line mapping, deleting this finding');
+                        }
+                    });
+                    updateIgnoredData(thisFileLineMapping,_fileId, _versionId);
+                }
+            }
+            
+        }
+    }
+
+
+    
+}
+//getFileLineMapping('itappsrcr', '2b3be81fdb0a8f407236d9f0ce96195a', 'sys_script_include', 'aa5be81fdb0a8f407236d9f0ce961960');
+function getFileLineMapping(instanceName, fileId, fileType, versionId) {
+
+    if (!instanceName || !fileId || !fileType || !versionId) return;
+    var instanceData = getInstanceData(instanceName);
+    
+    gs.info('instanceData : ' + JSON.stringify(instanceData));
+
+    if (instanceData){
+        try {
+            var request = new sn_ws.RESTMessageV2();
+            request.setEndpoint("http://" + instanceName + ".service-now.com/api/x_snc_sn_rcr_probe/getchangedlines/process");
+            request.setHttpMethod('post');
+            request.setBasicAuth(instanceData.username,instanceData.password);
+            request.setRequestBody(JSON.stringify([
+                {
+                    'fileSysId': fileId, 
+                    'fileType' : fileType,
+                    'versionId': versionId
+                }]));
+            var response = request.execute();
+            var resObj = JSON.parse(response.getBody());
+            
+            gs.info('Rssponse from getchangedlines' + JSON.stringify(resObj));
+            
+            if (resObj && resObj.result && resObj.result[fileId]){
+                return resObj.result[fileId];
+            }
+        } catch (error) {
+            gs.error(error);
+        }
+    }
+    return;
+}
+
+function getInstanceData(instanceName){
+    var _insData;
+    var instanceGR = new GlideRecord('x_snc_rcr_hub_instance_watch');
+    instanceGR.addQuery('instance_name', instanceName)
+    instanceGR.addActiveQuery();
+    instanceGR.query();
+    if(instanceGR.next()){   
+        _insData = {
+            username : instanceGR.getValue('user_name'),
+            password : instanceGR.password.getDecryptedValue()
+        }
+    }
+    return _insData;
+};
+
+function updateIgnoredData(fileLineMapping,fileId, versionId){
+    if (!fileLineMapping || !fileId || !versionId) return;
+
+    var igReviewGR = new GlideRecord('x_snc_rcr_hub_ignored_review_results');
+    igReviewGR.addQuery('file_id', fileId);
+    igReviewGR.query();
+    gs.info('Updating ignored review results');
+    while (igReviewGR.next()) {
+        var crLineNumber = igReviewGR.getValue('line_number');
+        if (fileLineMapping[crLineNumber] && fileLineMapping[crLineNumber] >= 0){
+            igReviewGR.setValue('version_id' , versionId);
+            igReviewGR.setValue('line_number', fileLineMapping[crLineNumber]);
+            igReviewGR.update();
+            gs.info('Updated ignored review line number from '+  crLineNumber + " to "+ fileLineMapping[crLineNumber] + ' , for file(' + fileId + ').');
+           
+        }
+    }
+}]]></script>
+        <sys_class_name>sysauto_script</sys_class_name>
+        <sys_created_by>pradeep</sys_created_by>
+        <sys_created_on>2017-11-10 10:45:52</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>e06a661edbda83007aa6546fdf961920</sys_id>
+        <sys_mod_count>6</sys_mod_count>
+        <sys_name>Delete ignored findings</sys_name>
+        <sys_package display_value="RcR-Hub" source="x_snc_rcr_hub">fa919f87db9dc3007236d9f0ce961914</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="RcR-Hub">fa919f87db9dc3007236d9f0ce961914</sys_scope>
+        <sys_update_name>sysauto_script_e06a661edbda83007aa6546fdf961920</sys_update_name>
+        <sys_updated_by>pradeep</sys_updated_by>
+        <sys_updated_on>2017-12-12 07:24:02</sys_updated_on>
+        <upgrade_safe>false</upgrade_safe>
+    </sysauto_script>
+</record_update>

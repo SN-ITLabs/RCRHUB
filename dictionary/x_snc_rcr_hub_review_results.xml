@@ -13,13 +13,13 @@
         <element label="File ID" max_length="40" name="file_id" type="string"/>
         <element label="File Name" max_length="40" name="file_name" type="string"/>
         <element label="File Type" max_length="40" name="file_type" type="string"/>
-        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#9;var url = &quot;https://&quot; + current.instance_name + &quot;.service-now.com/sys_metadata.do?sys_id=&quot; + current.file_id;&#13;&#10;&#9;return url;  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="File URL" max_length="1024" name="file_url" read_only="true" type="url" virtual="true"/>
+        <element calculation="(function calculatedFieldValue(current) {&#10;&#9;var url = &quot;https://&quot; + current.instance_name + &quot;.service-now.com/sys_metadata.do?sys_id=&quot; + current.file_id;&#10;&#9;return url;  // return the calculated value&#10;&#10;})(current);" label="File URL" max_length="1024" name="file_url" read_only="true" type="url" virtual="true"/>
         <element label="Instance Name" max_length="40" name="instance_name" type="string"/>
         <element label="Line number" max_length="40" name="line_number" type="integer"/>
         <element label="Manager" max_length="40" name="manager" type="string"/>
         <element default="javascript:getNextObjNumberPadded();" dynamic_default_value="fdcb83a85f220100a9ad2572f2b4773c" label="Number" max_length="40" name="number" type="string" use_dynamic_default="true"/>
         <element label="Occurrence" max_length="40" name="occurrence" type="integer"/>
-        <element label="Review Comments" max_length="40" name="review_comments" type="string"/>
+        <element label="Review Comments" max_length="400" name="review_comments" type="string"/>
         <element label="Review Last Seen" max_length="40" name="review_last_seen" type="glide_date_time"/>
         <element choice="1" default="open" label="Review Status" max_length="40" name="review_status" type="choice">
             <choice>
@@ -28,7 +28,7 @@
                 <element label="Open" value="open"/>
             </choice>
         </element>
-        <element label="Rule Description" max_length="40" name="rule_description" type="string"/>
+        <element label="Rule Description" max_length="400" name="rule_description" type="string"/>
         <element label="Rule Name" max_length="40" name="rule_name" type="string"/>
         <element label="Rule Number" max_length="200" name="rule_number" type="string"/>
         <element default="javascript:current.getTableName();" dynamic_default_value="b5cb83a85f220100a9ad2572f2b4773c" label="Class" max_length="80" name="sys_class_name" type="sys_class_name" use_dynamic_default="true"/>

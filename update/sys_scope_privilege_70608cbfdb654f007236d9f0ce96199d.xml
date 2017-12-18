@@ -7,7 +7,7 @@
         <sys_class_name>sys_scope_privilege</sys_class_name>
         <sys_created_by>chaitanya</sys_created_by>
         <sys_created_on>2017-10-08 07:26:56</sys_created_on>
-        <sys_customer_update>true</sys_customer_update>
+        <sys_customer_update>false</sys_customer_update>
         <sys_id>70608cbfdb654f007236d9f0ce96199d</sys_id>
         <sys_mod_count>0</sys_mod_count>
         <sys_name>Differ</sys_name>

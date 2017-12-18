@@ -16,7 +16,7 @@ RcRHubUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 	STATUS_CODE_PERMISSION_FAILED: -3,
 	STATUS_CODE_SUCCESS: 1,
 	MIN_DURATION: 2,
-	MAX_DURATION: 5,
+	MAX_DURATION: 30,
 	
 	setup: function() {
 		var result = {};
@@ -24,7 +24,7 @@ RcRHubUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 		var gr = new GlideRecord('x_snc_rcr_hub_instance_watch');
 		gr.get(recordId);
 		if(gr.isValidRecord()) {
-			result = this.validateInstance(gr);
+			result = this.uploadProbeToInstance(gr);
 		}else {
 			result["code"] = this.STATUS_CODE_NOVALID_INSTANCE;
 		}		
@@ -35,11 +35,11 @@ RcRHubUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 		gr.addActiveQuery();
 		gr.query();
 		while(gr.next()) {
-			this.validateInstance(gr);
+			this.uploadProbeToInstance(gr);
 		}
 	},
 	
-	validateInstance: function(instanceRecord) {
+	uploadProbeToInstance: function(instanceRecord) {
 		var output = {};
 		var instance, username, password, isActive;
 
@@ -52,9 +52,10 @@ RcRHubUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 			output["code"] = this.STATUS_CODE_INSTANCE_INACTIVE;
 			gr.status = "failed";
 		}else{
+			gs.info("Pushing RCR PROBE scoped app to : "+ instance);
+
 			var restMessage = new sn_ws.RESTMessageV2();
 			var endpoint = "http://" + instance + ".service-now.com/api/sn_devstudio/v1/vcs/apps";
-			gs.info("Endpoint: " + endpoint);
 			restMessage.setBasicAuth(username,password);
 			restMessage.setHttpMethod("post");
 			var repoUrl = gs.getProperty('x_snc_rcr_hub.rcr_remote_app_repo');
@@ -65,6 +66,7 @@ RcRHubUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 			restMessage.setRequestBody(bodyContent);
 			restMessage.setEndpoint(endpoint);
 			var response = restMessage.execute();
+			//gs.info(JSON.stringify(response));
 			var statusCode = response.getStatusCode(); //401 = Auth failed
 			//403 = Authorization failed
 			switch(statusCode){
@@ -88,9 +90,68 @@ RcRHubUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 			}
 		}
 		
+		//gs.info(response.getBody());
+		
 		//instanceRecord.setWorkflow(false);
 		instanceRecord.update();
 		return JSON.stringify(output);
+	},
+	
+	instanceHasRCRScopedApp : function(instanceRecord) {
+		if (!instanceRecord) return;
+
+		var isActive = instanceRecord.getValue('active');
+		var instance = instanceRecord.getValue('instance_name');
+		var username = instanceRecord.getValue('user_name');
+		var password = instanceRecord.password.getDecryptedValue();
+
+		if(!isActive) return;
+
+		var scoped_app_search_query = "http://" + instance + ".service-now.com/api/now/table/sys_app?sysparm_query=scope%3Dx_snc_sn_rcr_probe&sysparm_limit=1";
+
+		try {
+			var restMessage = new sn_ws.RESTMessageV2();
+			restMessage.setHttpMethod("GET");
+			restMessage.setBasicAuth(username,password);
+			restMessage.setEndpoint(scoped_app_search_query);
+			var response = restMessage.execute();
+
+			var statusCode = response.getStatusCode(); //401 = Auth failed
+			//gs.info(statusCode);
+
+			switch(statusCode){
+				case 401: 
+				case 403: 
+					//TODO: Add a comment in the journal field
+					throw new Error("User does not have access to create scoped app on instance");
+					break;
+				case 200:
+					var _res = response.getBody();
+					var resp = JSON.parse(_res);
+					if (!resp || !resp.result)
+						throw new Error("Oops! No data returned while verifying scoped app. Retry Configuring");
+
+					var responseObj = resp.result[0];
+					if (responseObj && responseObj.scope == "x_snc_sn_rcr_probe") {
+						return true;
+					}
+					break;
+				default:
+					throw new Error("Unknown error");
+					break;
+			}
+			
+			return false;
+
+		} catch (error) {
+			gs.error("RCR PROBE SCOPED APP VERIFY : No data returned while verifying scoped app, " + 
+					"for instance : " + instance);
+			gs.error("RCR PROBE SCOPED APP VERIFY : Response from REST API :: " +  response);
+			instanceRecord.notes = error;
+			instanceRecord.setValue('active', false);
+			instanceRecord.update();
+			return false;
+		}
 	},
 	
 	allowReadAccessOnVersionsTable: function(instance, username, password) {
@@ -135,40 +196,78 @@ RcRHubUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 	
 	runCodeReviewOnInstance: function(instanceRecord, onDuration) {
 		var cmd, duration, files;
+		var _instanceName = instanceRecord.getValue('instance_name');
 		if(onDuration) {
 			cmd = gs.getProperty('x_snc_rcr_hub.RCR_COMMAND_ON_DURATION');
 			duration = gs.getProperty('x_snc_rcr_hub.RCR_SLIDING_WINDOW');
-			cmd = cmd.replace('$1', instanceRecord.getValue('instance_name'));
+			cmd = cmd.replace('$1', _instanceName);
 			cmd = cmd.replace('$2', duration);
 			this.sendCommand(cmd);
 		}else {
 			cmd = gs.getProperty('x_snc_rcr_hub.RCR_COMMAND_ON_FILES');
-			files = this.getListOfFilesToReview();
+			files = this.getListOfFilesToReview(_instanceName);
 			if (files){
-				cmd = cmd.replace('$1', instanceRecord.getValue('instance_name'));
-				cmd = cmd.replace('$2', files);				
-				this.sendCommand(cmd);				
+				cmd = cmd.replace('$1', _instanceName);
+				cmd = cmd.replace('$2', files);
+				cmd = cmd.split('"').join('&quot;');
+				this.sendCommand(cmd);
+				gs.info(cmd);
 			}
 		}
 	},
 	
-	getListOfFilesToReview: function() {
-		var gr = new GlideRecord('x_snc_rcr_hub_review_results');
-		var result = [];
-		var resultObj = {};
+	getListOfFilesToReview: function(_instanceName) {
+		if (!_instanceName) return;
+		var result = [], resultObj = {};
+		
+		var gr = new GlideAggregate('x_snc_rcr_hub_review_results');
+		gr.addQuery('instance_name',_instanceName);
 		var encodedQuery = "review_last_seen<=javascript:gs.hoursAgo(" + this.MIN_DURATION + ")^review_last_seen>=javascript:gs.hoursAgo(" + this.MAX_DURATION + ")";
 		gr.addEncodedQuery(encodedQuery);
+		gr.groupBy('file_id');
+		gr.groupBy('file_type');
 		gr.query();
 		while(gr.next()) {
 			resultObj = {};
-			resultObj["id"] = gr.file_id;
-			resultObj["type"] = gr.file_type;
+			resultObj["sys_id"] = gr.getValue('file_id') ;
+			resultObj["type"] = gr.getValue('file_type');
+			
+			// GET DURATION FROM FINDING
+			var _duration = this.getFirstFindingDaysFromNow(_instanceName, encodedQuery, resultObj["sys_id"])
+			resultObj["duration"] = _duration || 15;
+			  
 			result.push(resultObj);
 		}
+		
+		gs.info('RCR ON LEFT OVERS: FOR  "' +_instanceName+'", # of files ' + result.length);
+		
 		if (result.length > 0 )
 			return JSON.stringify(result);
 		else 
 			return;
+	},
+	
+	getFirstFindingDaysFromNow: function(instanceName, encodedQuery, file_id) {
+		if (!instanceName || !file_id) return;
+
+		var rvGR = new GlideAggregate("x_snc_rcr_hub_review_results");
+		if (encodedQuery) rvGR.addEncodedQuery(encodedQuery);
+		rvGR.addQuery("instance_name", instanceName);
+		rvGR.addQuery("file_id", file_id);
+		rvGR.orderBy("sys_created_on");
+		rvGR.query();
+		if (rvGR.next()) {
+			var _rvDate = new GlideDateTime(rvGR.getValue('sys_created_on')); 
+			var _ctDate = new GlideDateTime();
+			if (_ctDate && _rvDate){
+				var _dur = GlideDateTime.subtract(_rvDate, _ctDate); //the difference between gdt1 and gdt2
+				var days = _dur.getRoundedDayPart();
+				if(days>0) return days;
+			}
+
+		}
+
+		return;
 	},
 	
 	sendCommand: function(command) {		
@@ -187,7 +286,6 @@ RcRHubUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 	processOutput: function(record) {
 		var obj,reviewObj;
 		var tempPayload = record.getValue('payload');
-		gs.info('In processOutput - ');
 		
 		if (!tempPayload) return;
 		
@@ -198,23 +296,22 @@ RcRHubUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 			var rcr_results = JSON.parse(fullPayloadObj['results']['result']['stdout']);
 			if (Array.isArray(rcr_results) && rcr_results.length > 0){
 				//gs.info(JSON.stringify(rcr_results[0]['instance']));
-				gs.info('In processOutput - rcr_results = ' + rcr_results);
+				gs.info('In processOutput - # of rcr_results = ' + rcr_results.length);
 
 				for(var objIndx in rcr_results) {
 					obj = rcr_results[objIndx];
-					gs.info(obj.file + "::" + obj.instance + "::" + obj.reviews);
-					
+					gs.info(obj.instance + " :: " + obj.file + " :: " + obj.reviews.length + " reviews");
 					if(obj.reviews && obj.reviews.length > 0) {
 						for(var reviewIndx in obj.reviews) {
 							reviewObj = obj.reviews[reviewIndx];
 							this.upsertReview(reviewObj, obj.file, obj.instance);
-							gs.info(reviewObj.line + "::" + reviewObj.ruleid + "::" + reviewObj.message + "::" + reviewObj.developer);
+							gs.info(reviewObj.line + " :: " + reviewObj.ruleid + " :: " + reviewObj.message + " :: " + reviewObj.developer);
 						}
 					}
 				}
 			}
 		} catch(e){
-			gs.error('Failed parsing the RCR tool output','SNRCR');
+			gs.error('Failed parsing the RCR tool output'+e,'SNRCR');
 			return;
 		}
 
@@ -237,6 +334,7 @@ RcRHubUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 			gr.next();
 			gr.setValue('review_last_seen', new GlideDateTime());
 			gr.setValue('occurrence', parseInt(gr.getValue('occurrence')) + 1);
+			gr.update();
 		}else {
 			gr.initialize();
 			gr.setValue('developer', reviewInfo.developer);
@@ -253,8 +351,8 @@ RcRHubUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 			gr.setValue('rule_description', reviewInfo.description);
 			gr.setValue('rule_name', reviewInfo.rulename);
 			gr.setValue('rule_number', reviewInfo.ruleid);
+			gr.insert();
 		}
-		gr.update();
 	},
 
 	convert2Json: function(inputStr) {
@@ -273,14 +371,14 @@ RcRHubUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
         <sys_created_on>2017-09-24 05:03:38</sys_created_on>
         <sys_customer_update>true</sys_customer_update>
         <sys_id>4239974fdb9dc3007236d9f0ce9619cc</sys_id>
-        <sys_mod_count>63</sys_mod_count>
+        <sys_mod_count>87</sys_mod_count>
         <sys_name>RcRHubUtils</sys_name>
         <sys_package display_value="RcR-Hub" source="x_snc_rcr_hub">fa919f87db9dc3007236d9f0ce961914</sys_package>
         <sys_policy>read</sys_policy>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="RcR-Hub">fa919f87db9dc3007236d9f0ce961914</sys_scope>
         <sys_update_name>sys_script_include_4239974fdb9dc3007236d9f0ce9619cc</sys_update_name>
-        <sys_updated_by>pradeep.g</sys_updated_by>
-        <sys_updated_on>2017-11-05 18:20:18</sys_updated_on>
+        <sys_updated_by>pradeep</sys_updated_by>
+        <sys_updated_on>2017-12-18 12:30:49</sys_updated_on>
     </sys_script_include>
 </record_update>

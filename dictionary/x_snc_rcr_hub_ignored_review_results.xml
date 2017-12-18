@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <database>
-    <element extends="x_snc_rcr_hub_review_results" label="Ignored Review Results" max_length="40" name="x_snc_rcr_hub_ignored_review_results" type="collection"/>
+    <element extends="x_snc_rcr_hub_review_results" label="Ignored Review Results" max_length="40" name="x_snc_rcr_hub_ignored_review_results" type="collection">
+        <element label="Ignored By" max_length="100" name="ignored_by" type="string"/>
+    </element>
 </database>

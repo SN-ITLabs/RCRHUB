@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update sys_domain="global" table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <access>package_private</access>
+        <action_delete>false</action_delete>
+        <action_insert>false</action_insert>
+        <action_query>false</action_query>
+        <action_update>true</action_update>
+        <active>true</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>x_snc_rcr_hub_review_results</collection>
+        <condition/>
+        <description/>
+        <execute_function>false</execute_function>
+        <filter_condition table="x_snc_rcr_hub_review_results">review_statusCHANGESTOignored^EQ<item endquery="false" field="review_status" goto="false" newquery="false" operator="CHANGESTO" or="false" value="ignored"/>
+            <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
+        </filter_condition>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>Move ignored result to ignores table</name>
+        <order>1000</order>
+        <priority>100</priority>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_service_text/>
+        <rest_variables/>
+        <role_conditions/>
+        <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
+	
+	var igRGR = new GlideRecord("x_snc_rcr_hub_ignored_review_results");
+	igRGR.addQuery("instance_name", current.getValue("instance_name"));
+	igRGR.addQuery("file_id", current.getValue("file_id"));
+	igRGR.addQuery("version_id", current.getValue("version_id"));
+	igRGR.addQuery("line_number", current.getValue("line_number"));
+	igRGR.addQuery("rule_number", current.getValue("rule_number"));
+	igRGR.query();
+	if (igRGR.getRowCount() <= 0) {
+		igRGR.initialize();
+		igRGR.setValue("review_status" ,'ignored');
+		igRGR.setValue("developer", current.getValue("developer"));
+		igRGR.setValue("error_level", current.getValue("error_level"));
+		igRGR.setValue("file_id", current.getValue("file_id"));
+		igRGR.setValue("version_id", current.getValue("version_id"));
+		igRGR.setValue("file_name", current.getValue("file_name"));
+		igRGR.setValue("file_type", current.getValue("file_type"));
+		igRGR.setValue("instance_name", current.getValue("instance_name"));
+		igRGR.setValue("line_number", current.getValue("line_number"));
+		igRGR.setValue("occurrence", current.getValue("occurrence"));
+		igRGR.setValue("review_comments", current.getValue("review_comments"));
+		igRGR.setValue("review_last_seen", current.getValue("review_last_seen"));
+		igRGR.setValue("rule_description", current.getValue("rule_description"));
+		igRGR.setValue("rule_name", current.getValue("rule_name"));
+		igRGR.setValue("rule_number", current.getValue("rule_number"));
+		igRGR.setValue("additional_comments", current.getValue("additional_comments"));
+		igRGR.insert();
+	}
+	
+	//current.deleteRecord();
+	
+})(current, previous);]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>pradeep</sys_created_by>
+        <sys_created_on>2017-11-11 11:55:58</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>df5284fadb16c3007aa6546fdf961940</sys_id>
+        <sys_mod_count>3</sys_mod_count>
+        <sys_name>Move ignored result to ignores table</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="RcR-Hub" source="x_snc_rcr_hub">fa919f87db9dc3007236d9f0ce961914</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="RcR-Hub">fa919f87db9dc3007236d9f0ce961914</sys_scope>
+        <sys_update_name>sys_script_df5284fadb16c3007aa6546fdf961940</sys_update_name>
+        <sys_updated_by>pradeep</sys_updated_by>
+        <sys_updated_on>2017-11-11 12:08:41</sys_updated_on>
+        <template/>
+        <when>after</when>
+    </sys_script>
+    <sys_translated_text action="delete_multiple" query="documentkey=df5284fadb16c3007aa6546fdf961940"/>
+</record_update>

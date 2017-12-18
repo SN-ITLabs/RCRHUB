@@ -4,77 +4,47 @@
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
             <element>name</element>
-            <list_id display_value="ecc_agent_script_include" element="NULL" name="ecc_agent_script_include" parent="NULL" relationship="NULL" sys_domain="global" view="0feccf829d32320092c0251cbdfd796b">de61656bdbdd07007236d9f0ce9619e3</list_id>
+            <list_id display_value="ecc_agent_script_include" element="NULL" name="ecc_agent_script_include" parent="NULL" relationship="NULL" sys_domain="global" view="fd87df9113000300b1123192e144b087">bb62635ec0a8020100bf4f077688632c</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>0</position>
             <sum>false</sum>
-            <sys_created_by>chaitanya</sys_created_by>
-            <sys_created_on>2017-09-25 09:36:40</sys_created_on>
-            <sys_id>1e61656bdbdd07007236d9f0ce9619e4</sys_id>
+            <sys_created_by>glide.maint</sys_created_by>
+            <sys_created_on>2009-04-18 22:39:28</sys_created_on>
+            <sys_id>bb626362c0a802010012e9ee2d1c7563</sys_id>
             <sys_mod_count>0</sys_mod_count>
-            <sys_updated_by>chaitanya</sys_updated_by>
-            <sys_updated_on>2017-09-25 09:36:40</sys_updated_on>
-        </sys_ui_list_element>
-        <sys_ui_list_element action="INSERT_OR_UPDATE">
-            <average_value>false</average_value>
-            <element>active</element>
-            <list_id display_value="ecc_agent_script_include" element="NULL" name="ecc_agent_script_include" parent="NULL" relationship="NULL" sys_domain="global" view="0feccf829d32320092c0251cbdfd796b">de61656bdbdd07007236d9f0ce9619e3</list_id>
-            <max_value>false</max_value>
-            <min_value>false</min_value>
-            <position>1</position>
-            <sum>false</sum>
-            <sys_created_by>chaitanya</sys_created_by>
-            <sys_created_on>2017-09-25 09:36:40</sys_created_on>
-            <sys_id>1661656bdbdd07007236d9f0ce9619e5</sys_id>
-            <sys_mod_count>0</sys_mod_count>
-            <sys_updated_by>chaitanya</sys_updated_by>
-            <sys_updated_on>2017-09-25 09:36:40</sys_updated_on>
+            <sys_updated_by>glide.maint</sys_updated_by>
+            <sys_updated_on>2009-04-18 22:39:28</sys_updated_on>
         </sys_ui_list_element>
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
             <element>description</element>
-            <list_id display_value="ecc_agent_script_include" element="NULL" name="ecc_agent_script_include" parent="NULL" relationship="NULL" sys_domain="global" view="0feccf829d32320092c0251cbdfd796b">de61656bdbdd07007236d9f0ce9619e3</list_id>
+            <list_id display_value="ecc_agent_script_include" element="NULL" name="ecc_agent_script_include" parent="NULL" relationship="NULL" sys_domain="global" view="fd87df9113000300b1123192e144b087">bb62635ec0a8020100bf4f077688632c</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>1</position>
+            <sum>false</sum>
+            <sys_created_by>glide.maint</sys_created_by>
+            <sys_created_on>2009-04-18 22:39:28</sys_created_on>
+            <sys_id>bb626366c0a8020100482826caaaa3fe</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>glide.maint</sys_updated_by>
+            <sys_updated_on>2009-04-18 22:39:28</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>active</element>
+            <list_id display_value="ecc_agent_script_include" element="NULL" name="ecc_agent_script_include" parent="NULL" relationship="NULL" sys_domain="global" view="fd87df9113000300b1123192e144b087">bb62635ec0a8020100bf4f077688632c</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>2</position>
             <sum>false</sum>
-            <sys_created_by>chaitanya</sys_created_by>
-            <sys_created_on>2017-09-25 09:36:40</sys_created_on>
-            <sys_id>9661656bdbdd07007236d9f0ce9619e5</sys_id>
+            <sys_created_by>glide.maint</sys_created_by>
+            <sys_created_on>2009-04-18 22:39:28</sys_created_on>
+            <sys_id>bb626369c0a80201009897cb5d2aae06</sys_id>
             <sys_mod_count>0</sys_mod_count>
-            <sys_updated_by>chaitanya</sys_updated_by>
-            <sys_updated_on>2017-09-25 09:36:40</sys_updated_on>
-        </sys_ui_list_element>
-        <sys_ui_list_element action="INSERT_OR_UPDATE">
-            <average_value>false</average_value>
-            <element>script</element>
-            <list_id display_value="ecc_agent_script_include" element="NULL" name="ecc_agent_script_include" parent="NULL" relationship="NULL" sys_domain="global" view="0feccf829d32320092c0251cbdfd796b">de61656bdbdd07007236d9f0ce9619e3</list_id>
-            <max_value>false</max_value>
-            <min_value>false</min_value>
-            <position>3</position>
-            <sum>false</sum>
-            <sys_created_by>chaitanya</sys_created_by>
-            <sys_created_on>2017-09-25 09:36:40</sys_created_on>
-            <sys_id>1a61656bdbdd07007236d9f0ce9619e5</sys_id>
-            <sys_mod_count>0</sys_mod_count>
-            <sys_updated_by>chaitanya</sys_updated_by>
-            <sys_updated_on>2017-09-25 09:36:40</sys_updated_on>
-        </sys_ui_list_element>
-        <sys_ui_list_element action="INSERT_OR_UPDATE">
-            <average_value>false</average_value>
-            <element>sys_domain</element>
-            <list_id display_value="ecc_agent_script_include" element="NULL" name="ecc_agent_script_include" parent="NULL" relationship="NULL" sys_domain="global" view="0feccf829d32320092c0251cbdfd796b">de61656bdbdd07007236d9f0ce9619e3</list_id>
-            <max_value>false</max_value>
-            <min_value>false</min_value>
-            <position>4</position>
-            <sum>false</sum>
-            <sys_created_by>chaitanya</sys_created_by>
-            <sys_created_on>2017-09-25 09:36:40</sys_created_on>
-            <sys_id>9a61656bdbdd07007236d9f0ce9619e5</sys_id>
-            <sys_mod_count>0</sys_mod_count>
-            <sys_updated_by>chaitanya</sys_updated_by>
-            <sys_updated_on>2017-09-25 09:36:40</sys_updated_on>
+            <sys_updated_by>glide.maint</sys_updated_by>
+            <sys_updated_on>2009-04-18 22:39:28</sys_updated_on>
         </sys_ui_list_element>
         <sys_ui_list action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
@@ -89,7 +59,7 @@
             <sys_class_name>sys_ui_list</sys_class_name>
             <sys_created_by>chaitanya</sys_created_by>
             <sys_created_on>2017-09-25 09:37:15</sys_created_on>
-            <sys_customer_update>true</sys_customer_update>
+            <sys_customer_update>false</sys_customer_update>
             <sys_domain>global</sys_domain>
             <sys_domain_path>/</sys_domain_path>
             <sys_id>8b81e56bdbdd07007236d9f0ce961906</sys_id>
@@ -102,8 +72,8 @@
             <sys_update_name>sys_ui_list_ecc_agent_script_include_Discovery</sys_update_name>
             <sys_updated_by>chaitanya</sys_updated_by>
             <sys_updated_on>2017-09-25 09:37:15</sys_updated_on>
-            <sys_user display_value="chaitanya chaitanya">c2d3fb45db3f7600a86a5404ce9619d5</sys_user>
-            <view display_value="Discovery" name="Discovery">0feccf829d32320092c0251cbdfd796b</view>
+            <sys_user display_value="">c2d3fb45db3f7600a86a5404ce9619d5</sys_user>
+            <view display_value="Discovery" name="Discovery">fd87df9113000300b1123192e144b087</view>
             <view_name/>
         </sys_ui_list>
     </sys_ui_list>

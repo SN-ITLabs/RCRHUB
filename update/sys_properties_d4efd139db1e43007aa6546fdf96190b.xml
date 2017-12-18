@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_properties">
+    <sys_properties action="INSERT_OR_UPDATE">
+        <choices/>
+        <description/>
+        <ignore_cache>false</ignore_cache>
+        <is_private>false</is_private>
+        <name>x_snc_rcr_hub.RCR_SUBSCRIBER_MANAGERS_LIST</name>
+        <read_roles/>
+        <suffix>RCR_SUBSCRIBER_MANAGERS_LIST</suffix>
+        <sys_class_name>sys_properties</sys_class_name>
+        <sys_created_by>pradeep</sys_created_by>
+        <sys_created_on>2017-11-08 16:04:46</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>d4efd139db1e43007aa6546fdf96190b</sys_id>
+        <sys_mod_count>4</sys_mod_count>
+        <sys_name>x_snc_rcr_hub.RCR_SUBSCRIBER_MANAGERS_LIST</sys_name>
+        <sys_package display_value="RcR-Hub" source="x_snc_rcr_hub">fa919f87db9dc3007236d9f0ce961914</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="RcR-Hub">fa919f87db9dc3007236d9f0ce961914</sys_scope>
+        <sys_update_name>sys_properties_d4efd139db1e43007aa6546fdf96190b</sys_update_name>
+        <sys_updated_by>pradeep</sys_updated_by>
+        <sys_updated_on>2017-12-12 09:30:36</sys_updated_on>
+        <type>string</type>
+        <value>chaitanya.saragadam,anupam.bhattacharya,kiranbabu.dasari,sujit.sharma,arun.tiwari,spandan.chakraborty,andra.sujani,karunakar.solipeta,shilpa.janagam,Anitha.Loganathan,jason.wang,amjad.shaikh,nitesh.shelar</value>
+        <write_roles/>
+    </sys_properties>
+    <sys_translated_text action="delete_multiple" query="documentkey=d4efd139db1e43007aa6546fdf96190b"/>
+</record_update>
